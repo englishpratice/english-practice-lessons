@@ -61,9 +61,36 @@ body.role-vi .unused-meaning, body.role-vi .chinese {display:none!important}
 #phraseTable th:nth-child(2), #phraseTable td:nth-child(2), #phraseTable th:nth-child(3), #phraseTable td:nth-child(3) {display:table-cell!important}
 .target-meaning-line {display:block!important}
 .meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}
+
+.back-wrap{max-width:1100px;margin:18px auto 0;padding:0 18px}.back-link{display:inline-flex;align-items:center;gap:9px;padding:11px 17px;border:1px solid #cbd8ee;border-radius:999px;background:#fff;color:#155eef;font-weight:800;text-decoration:none;box-shadow:0 3px 10px #1723340a;transition:background .2s,transform .2s}.back-link:hover{background:#edf4ff;transform:translateY(-1px)}.back-link:focus-visible{outline:3px solid #9bbcff;outline-offset:3px}@media(max-width:600px){.back-wrap{margin-top:12px;padding:0 14px}.back-link{font-size:14px;padding:10px 14px}}
+
+/* Harmonious study highlights */
+:root{--accent-coral:#f08a5d;--accent-teal:#168b8b;--soft-blue:#edf4ff;--soft-mint:#eaf8f1;--soft-peach:#fff2e9}
+body{background:linear-gradient(180deg,#f4f7fc 0%,#fbfcff 44%,#f5f8fc 100%)}
+header{box-shadow:0 12px 28px rgba(21,94,239,.13);border:1px solid rgba(255,255,255,.3)}
+.notice{background:linear-gradient(135deg,#fff8e8,#fff3dc);border:1px solid #f6d28b;box-shadow:0 4px 12px rgba(190,135,28,.06)}
+h2{border-left:5px solid var(--accent-teal);padding:8px 0 8px 13px;background:linear-gradient(90deg,#e9f8f5 0%,rgba(233,248,245,0) 92%);border-radius:0 10px 10px 0}
+.card{border:1px solid #dce7f6;box-shadow:0 5px 16px rgba(23,35,52,.045);transition:box-shadow .2s,border-color .2s}
+.card:hover{border-color:#b9cff9;box-shadow:0 8px 20px rgba(21,94,239,.08)}
+.role{display:inline-block;padding:4px 10px;border-radius:7px;background:#eaf1ff;color:#155eef}
+.role.staff{background:#e8f7ef;color:#137547}
+.small-label{display:inline-block;background:#fff0e6;color:#a94c22;border-radius:7px;padding:4px 9px;margin:2px 0 9px;letter-spacing:.02em}
+.target-meaning-line{background:#f0faf5;border-left:4px solid #54b78b;border-radius:8px;padding:10px 12px}
+h3{color:#2453a6}
+th{background:#eaf2ff;color:#214b91}
+tr:nth-child(even) td{background:#fbfdff}
+.explain{background:linear-gradient(135deg,#f0f8ff,#f0faf5);border:1px solid #e1eee9}
+.hidden-english.show{background:#edf4ff;border-left-color:#f08a5d}
+.btn.primary{background:linear-gradient(135deg,#155eef,#397cf6);box-shadow:0 3px 8px rgba(21,94,239,.15)}
+.btn.secondary{background:#edf3ff;border-color:#c9d9ff}
+.audio-word{background:#eaf8f1;border-color:#b8e4cd;color:#137547}
+.back-link{background:#fff5ed;border-color:#f7d2bd;color:#a94c22}
+@media(max-width:560px){h2{font-size:21px}.target-meaning-line{padding:9px 10px}}
+
 </style>
 </head>
 <body class="role-vi">
+ <div class="back-wrap"><a class="back-link" href="./" aria-label="← Quay lại danh sách bài học">← Quay lại danh sách bài học</a></div>
 <main>
 <header><div class="kicker">LUYỆN TIẾNG ANH · BÀI 1</div><h1>Mua đồ ăn tại siêu thị Mỹ</h1><p>Học tiếng Anh Mỹ tự nhiên qua tình huống mua sắm thường gặp tại siêu thị.</p></header>
 <div class="notice"><strong>Cách học:</strong> Khi sẵn sàng, bạn bấm nút để hiện câu tiếng Anh. Bấm nút loa để nghe phát âm tiếng Anh Mỹ; từng từ vựng cũng có thể nghe riêng.<br><strong>Lưu ý về âm thanh:</strong> Trang sử dụng giọng tiếng Anh có sẵn trên trình duyệt hoặc thiết bị, nên giọng đọc có thể khác nhau tùy máy.</div>
