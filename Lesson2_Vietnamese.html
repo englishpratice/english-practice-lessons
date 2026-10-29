@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Bài 2: Gọi bữa sáng mang đi ở Mỹ. English conversation, vocabulary, and listening practice.">
+<title>Bài 2: Gọi bữa sáng mang đi ở Mỹ</title>
+<style>
+:root{--ink:#172334;--muted:#5d6878;--line:#dbe3ec;--blue:#155eef;--pale:#f3f7fc;--green:#137547;--gold:#fff7e6}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6f9;color:var(--ink);font:16px/1.58 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+main{max-width:900px;margin:auto;padding:16px}
+header{background:linear-gradient(135deg,#12365b,#175cd3);color:white;padding:27px 23px;border-radius:18px;margin:4px 0 18px}
+.kicker{font-size:13px;letter-spacing:.09em;font-weight:800;opacity:.9}
+h1{font-size:clamp(27px,5vw,38px);line-height:1.18;margin:9px 0}
+header p{margin:9px 0 0;color:#e6efff}
+.notice{background:var(--gold);border:1px solid #f2d28a;border-radius:12px;padding:13px 15px;margin:14px 0 22px}
+h2{font-size:23px;line-height:1.25;margin:28px 0 12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;margin:14px 0;box-shadow:0 2px 8px #17233408}
+.role{font-size:13px;font-weight:900;letter-spacing:.07em;margin-bottom:9px;color:var(--blue)}
+.role.staff{color:var(--green)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button{font:inherit;cursor:pointer}
+.btn{border:0;border-radius:999px;padding:9px 13px;font-size:14px;font-weight:750;display:inline-flex;align-items:center;gap:6px}
+.primary{background:var(--blue);color:white}
+.secondary{background:#eaf1ff;color:#174ea6;border:1px solid #c7d7fe}
+.audio-word{background:#eaf7ef;color:#12633a;border:1px solid #b7e1c5;border-radius:999px;padding:4px 9px;font-size:12px;white-space:nowrap}
+.translation{margin:12px 0 2px}
+.chinese{color:var(--muted);margin:3px 0 12px}
+.hidden-english{display:none;border-left:4px solid var(--blue);background:var(--pale);padding:12px 13px;border-radius:8px;margin:12px 0}
+.hidden-english.show{display:block}
+.sentence{font-size:22px;font-weight:800;line-height:1.4;margin:0}
+.small-label{font-size:13px;color:#344054;font-weight:850;text-transform:uppercase;letter-spacing:.045em;margin-bottom:7px}
+h3{font-size:17px;margin:18px 0 8px}
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:14px}
+th,td{text-align:left;border:1px solid var(--line);padding:8px;vertical-align:middle}
+th{background:var(--pale)}
+td:first-child{min-width:120px}
+.vocab-en{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:650}
+.explain{background:#f7f9fc;border-radius:10px;padding:11px 13px;margin-top:9px}
+.explain p{margin:5px 0}
+.practice .card{box-shadow:none}
+.status{font-size:13px;color:var(--muted);margin-top:7px}
+footer{font-size:13px;color:var(--muted);padding:22px 2px}
+@media(max-width:560px){main{padding:10px}.card{padding:13px}.sentence{font-size:19px}table{font-size:12px}th,td{padding:6px}td:first-child{min-width:0}.audio-word{font-size:11px;padding:4px 6px}}
+
+/* Audience-specific layout */
+body.role-en .chinese, body.role-en .translation {display:block}
+body.role-en .translation,body.role-en .chinese{display:none!important} body.role-en table td:nth-child(2),body.role-en table td:nth-child(3),body.role-en table th:nth-child(2),body.role-en table th:nth-child(3){display:none} body.role-en .explain p:nth-child(2),body.role-en .explain p:nth-child(3){display:none} body.role-en .explain p:nth-child(1){display:block} body.role-en .role{letter-spacing:.02em}
+
+body.role-en .target-meaning{display:table-cell} body.role-en table th:nth-child(4){display:table-cell}
+body.role-en table td:nth-child(2),body.role-en table td:nth-child(3),body.role-en table th:nth-child(2),body.role-en table th:nth-child(3){display:none}
+
+#phraseTable th:nth-child(2),#phraseTable td:nth-child(2){display:table-cell!important}
+#phraseTable th:nth-child(3),#phraseTable td:nth-child(3){display:table-cell!important}
+
+.target-meaning-line{display:block!important}
+.meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}.unused-meaning{display:none!important}
+
+body.role-vi .unused-meaning, body.role-vi .chinese {display:none!important}
+body.role-vi table td:nth-child(3), body.role-vi table th:nth-child(3){display:none!important}
+#dialogues table th:nth-child(n+3), #dialogues table td:nth-child(n+3) {display:none!important}
+#phraseTable th:nth-child(2), #phraseTable td:nth-child(2), #phraseTable th:nth-child(3), #phraseTable td:nth-child(3) {display:table-cell!important}
+.target-meaning-line {display:block!important}
+.meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}
+
+.back-wrap{max-width:1100px;margin:18px auto 0;padding:0 18px}.back-link{display:inline-flex;align-items:center;gap:9px;padding:11px 17px;border:1px solid #cbd8ee;border-radius:999px;background:#fff;color:#155eef;font-weight:800;text-decoration:none;box-shadow:0 3px 10px #1723340a;transition:background .2s,transform .2s}.back-link:hover{background:#edf4ff;transform:translateY(-1px)}.back-link:focus-visible{outline:3px solid #9bbcff;outline-offset:3px}@media(max-width:600px){.back-wrap{margin-top:12px;padding:0 14px}.back-link{font-size:14px;padding:10px 14px}}
+
+/* Harmonious study highlights */
+:root{--accent-coral:#f08a5d;--accent-teal:#168b8b;--soft-blue:#edf4ff;--soft-mint:#eaf8f1;--soft-peach:#fff2e9}
+body{background:linear-gradient(180deg,#f4f7fc 0%,#fbfcff 44%,#f5f8fc 100%)}
+header{box-shadow:0 12px 28px rgba(21,94,239,.13);border:1px solid rgba(255,255,255,.3)}
+.notice{background:linear-gradient(135deg,#fff8e8,#fff3dc);border:1px solid #f6d28b;box-shadow:0 4px 12px rgba(190,135,28,.06)}
+h2{border-left:5px solid var(--accent-teal);padding:8px 0 8px 13px;background:linear-gradient(90deg,#e9f8f5 0%,rgba(233,248,245,0) 92%);border-radius:0 10px 10px 0}
+.card{border:1px solid #dce7f6;box-shadow:0 5px 16px rgba(23,35,52,.045);transition:box-shadow .2s,border-color .2s}
+.card:hover{border-color:#b9cff9;box-shadow:0 8px 20px rgba(21,94,239,.08)}
+.role{display:inline-block;padding:4px 10px;border-radius:7px;background:#eaf1ff;color:#155eef}
+.role.staff{background:#e8f7ef;color:#137547}
+.small-label{display:inline-block;background:#fff0e6;color:#a94c22;border-radius:7px;padding:4px 9px;margin:2px 0 9px;letter-spacing:.02em}
+.target-meaning-line{background:#f0faf5;border-left:4px solid #54b78b;border-radius:8px;padding:10px 12px}
+h3{color:#2453a6}
+th{background:#eaf2ff;color:#214b91}
+tr:nth-child(even) td{background:#fbfdff}
+.explain{background:linear-gradient(135deg,#f0f8ff,#f0faf5);border:1px solid #e1eee9}
+.hidden-english.show{background:#edf4ff;border-left-color:#f08a5d}
+.btn.primary{background:linear-gradient(135deg,#155eef,#397cf6);box-shadow:0 3px 8px rgba(21,94,239,.15)}
+.btn.secondary{background:#edf3ff;border-color:#c9d9ff}
+.audio-word{background:#eaf8f1;border-color:#b8e4cd;color:#137547}
+.back-link{background:#fff5ed;border-color:#f7d2bd;color:#a94c22}
+@media(max-width:560px){h2{font-size:21px}.target-meaning-line{padding:9px 10px}}
+
+</style>
+</head>
+<body class="role-vi">
+ <div class="back-wrap"><a class="back-link" href="./" aria-label="← Quay lại danh sách bài học">← Quay lại danh sách bài học</a></div>
+<main>
+<header><div class="kicker">LUYỆN TIẾNG ANH · BÀI 2</div><h1>Gọi bữa sáng mang đi ở Mỹ</h1><div><strong>Ordering Breakfast to Go in the US</strong></div><p>Học tiếng Anh Mỹ tự nhiên qua tình huống gọi bữa sáng mang đi tại quán cà phê.</p></header>
+<div class="notice"><strong>Cách học:</strong> Khi sẵn sàng, bạn bấm nút để hiện câu tiếng Anh. Bấm nút loa để nghe phát âm tiếng Anh Mỹ; từng từ vựng cũng có thể nghe riêng.<br><strong>Lưu ý về âm thanh:</strong> Trang sử dụng giọng tiếng Anh có sẵn trên trình duyệt hoặc thiết bị, nên giọng đọc có thể khác nhau tùy máy.</div>
+<h2>Phần 1. Hội thoại và luyện nghe từng câu</h2>
+<div id="dialogues"></div>
+
+<h2>Phần 2. Cụm từ giao tiếp hữu ích</h2>
+<table id="phraseTable"></table>
+
+<h2>Phần 3. Luyện nói toàn bộ hội thoại</h2>
+<p><strong>Cách luyện:</strong> Nghe trước, nhắc lại từng câu thành tiếng, sau đó thử nói lại mà không nhìn câu tiếng Anh. Bạn có thể đổi vai khách hàng, nhân viên siêu thị và thu ngân.</p>
+<div class="notice"><strong>Bối cảnh:</strong> Bạn ghé một quán cà phê ở Mỹ vào buổi sáng để mua đồ ăn mang đi. Bạn gọi bánh sandwich trứng phô mai và cà phê đá, xác nhận không muốn thịt rồi cung cấp tên cho đơn hàng.</div>
+<div id="fullRoleplay"></div>
+<script type="text/plain" id="unused-practice-placeholder"></script>
+<footer><strong>Bài 2: Gọi bữa sáng mang đi ở Mỹ</strong><br>Hãy luyện đều đặn: nghe mỗi câu hai đến ba lần, nhắc lại thành tiếng rồi thử tự nói mà không nhìn bài.</footer>
+</main>
+<script>
+const lessons = [{"role":"BARISTA","staff":true,"en":"Morning! What can I get for you?","vi":"Chào buổi sáng! Tôi có thể lấy món gì cho bạn?","zh":"早上好！您想来点什么？","vocab":[["Morning!","Chào buổi sáng!","早上好！"],["What","cái gì","什么"],["can I get","tôi có thể lấy / gọi","我可以要……吗"],["for you","cho bạn","为您；给您"]],"phrase":"What can I get for you? — Tôi có thể lấy món gì cho bạn? / 您想来点什么？","grammar":"Đây là cách nhân viên quán cà phê thân thiện hỏi khách muốn gọi món gì.","grammarZh":"“What can I get for you?” 是咖啡店员工询问顾客点什么的常见、友好说法。"},{"role":"CUSTOMER","staff":false,"en":"Hi, can I get an egg-and-cheese sandwich on an English muffin, please?","vi":"Chào bạn, cho tôi một bánh sandwich trứng phô mai kẹp bánh muffin kiểu Anh nhé?","zh":"你好，我想要一个英式松饼夹鸡蛋和奶酪的三明治，谢谢。","vocab":[["can I get","cho tôi / tôi có thể gọi","我可以要……吗"],["egg-and-cheese","trứng và phô mai","鸡蛋和奶酪"],["sandwich","bánh mì kẹp","三明治"],["English muffin","bánh muffin kiểu Anh","英式松饼"],["please","làm ơn / nhé","请；麻烦了"]],"phrase":"Can I get…? — Cho tôi gọi… nhé? / 我想要……可以吗？","grammar":"“Can I get…?” là cách gọi món rất phổ biến trong giao tiếp thân mật ở Mỹ. Thêm “please” giúp lời yêu cầu lịch sự hơn.","grammarZh":"“Can I get…?” 是美式日常点餐中很常见的表达；加上 “please” 会更礼貌。"},{"role":"BARISTA","staff":true,"en":"Sure. Would you like bacon or sausage with that?","vi":"Được chứ. Bạn có muốn thêm thịt xông khói hay xúc xích không?","zh":"好的。您想加培根还是香肠？","vocab":[["Sure","được chứ","当然；好的"],["Would you like…?","Bạn có muốn… không?","您想要……吗？"],["bacon","thịt xông khói","培根"],["sausage","xúc xích","香肠"],["with that","ăn kèm món đó","搭配这个"]],"phrase":"Would you like…? — Bạn có muốn… không? / 您想要……吗？","grammar":"“Would you like…?” là cách lịch sự để mời hoặc hỏi khách có muốn dùng món gì không. “With that” nghĩa là dùng kèm món vừa nhắc đến.","grammarZh":"“Would you like…?” 是礼貌地询问对方是否想要某物；“with that” 表示和刚才点的食物一起搭配。"},{"role":"CUSTOMER","staff":false,"en":"No meat, thanks. Just egg and cheese.","vi":"Không cần thịt đâu, cảm ơn. Chỉ trứng và phô mai thôi.","zh":"不用加肉，谢谢。只要鸡蛋和奶酪就好。","vocab":[["No meat","không có thịt","不要肉"],["thanks","cảm ơn","谢谢"],["just","chỉ; chỉ cần","只；仅仅"],["egg","trứng","鸡蛋"],["cheese","phô mai","奶酪"]],"phrase":"Just… — Chỉ… thôi. / 只要……就好。","grammar":"“Just…” có nghĩa là “chỉ… thôi”, dùng để làm rõ rằng bạn chỉ muốn những món vừa nêu.","grammarZh":"“Just…” 可以自然地用来说明自己只要刚才提到的东西。"},{"role":"BARISTA","staff":true,"en":"No problem. Anything to drink?","vi":"Không vấn đề gì. Bạn có muốn uống gì không?","zh":"没问题。您要喝点什么吗？","vocab":[["No problem","không vấn đề gì","没问题"],["Anything…?","Có muốn gì… không?","要不要……？"],["to drink","để uống / đồ uống","喝的东西"]],"phrase":"Anything to drink? — Bạn có muốn uống gì không? / 您要喝点什么吗？","grammar":"“Anything to drink?” là cách hỏi ngắn gọn, tự nhiên thay cho “Would you like anything to drink?” khi giao tiếp.","grammarZh":"“Anything to drink?” 是 “Would you like anything to drink?” 的口语简略说法。"},{"role":"CUSTOMER","staff":false,"en":"A medium iced coffee with a splash of oat milk, please.","vi":"Cho tôi một cà phê đá cỡ vừa, thêm một chút sữa yến mạch nhé.","zh":"请给我一杯中杯冰咖啡，加一点燕麦奶。","vocab":[["medium","cỡ vừa；vừa","中杯；中等大小"],["iced coffee","cà phê đá","冰咖啡"],["a splash of","một chút","少量；一点"],["oat milk","sữa yến mạch","燕麦奶"],["please","làm ơn / nhé","请；麻烦了"]],"phrase":"A medium…, please. — Cho tôi một… cỡ vừa nhé. / 请给我一杯中杯……。","grammar":"“A splash of…” nghĩa là một chút chất lỏng. Ở Mỹ, nhiều quán cà phê có sữa yến mạch như một lựa chọn thay cho sữa động vật.","grammarZh":"“A splash of…” 表示少量液体。在美国，咖啡店通常会提供燕麦奶等非乳制奶类选择。"},{"role":"BARISTA","staff":true,"en":"You got it. Is that for here or to go?","vi":"Được nhé. Bạn dùng tại đây hay mang đi?","zh":"好的。您是在这里吃，还是打包带走？","vocab":[["You got it","được nhé；để tôi làm","好的；没问题"],["for here","dùng tại đây","在这里吃／喝"],["or","hay；hoặc","还是；或者"],["to go","mang đi","外带；打包"]],"phrase":"For here or to go? — Dùng tại đây hay mang đi? / 在这里吃还是打包带走？","grammar":"“For here or to go?” là câu hỏi rất phổ biến ở quán cà phê và nhà hàng phục vụ nhanh tại Mỹ, để hỏi khách dùng tại chỗ hay mang đi.","grammarZh":"“For here or to go?” 是美国咖啡店和休闲快餐店非常常见的询问方式。"},{"role":"CUSTOMER","staff":false,"en":"To go, please. I'm in a bit of a hurry.","vi":"Cho tôi mang đi nhé. Tôi đang hơi vội.","zh":"打包带走，谢谢。我有点赶时间。","vocab":[["to go","mang đi","外带；打包带走"],["I'm (= I am)","tôi đang / tôi là","我是；我正在"],["in a hurry","đang vội","赶时间"],["a bit","hơi；một chút","有点；稍微"]],"phrase":"I'm in a bit of a hurry. — Tôi đang hơi vội. / 我有点赶时间。","grammar":"“A bit” làm cách nói nhẹ nhàng hơn và có nghĩa là “một chút”. “I’m in a hurry” nghĩa là “tôi đang vội”.","grammarZh":"“A bit” 表示程度不高，相当于“有点”。“I'm in a hurry” 表示自己赶时间。"},{"role":"BARISTA","staff":true,"en":"Of course. Can I get a name for the order? It'll be about five minutes, and your total is eight seventy-five.","vi":"Được chứ. Cho tôi xin tên cho đơn hàng nhé? Khoảng năm phút là xong, tổng cộng là 8 đô la 75 xu.","zh":"当然可以。请问订单留什么名字？大约五分钟就好，一共是八美元七十五美分。","vocab":[["Of course","được chứ；tất nhiên","当然可以"],["a name for the order","tên cho đơn hàng","订单姓名"],["about","khoảng","大约"],["five minutes","năm phút","五分钟"],["total","tổng cộng；tổng tiền","总额；总价"],["eight seventy-five","8 đô la 75 xu","八美元七十五美分"]],"phrase":"Can I get a name for the order? — Cho tôi xin tên cho đơn hàng nhé? / 请问订单留什么名字？","grammar":"“Can I get a name for the order?” là cách thường dùng để hỏi tên ghi trên đơn mang đi. “Eight seventy-five” là cách đọc tự nhiên của 8,75 đô la.","grammarZh":"“Can I get a name for the order?” 是外带点单时常见的询问姓名方式。“Eight seventy-five” 是口语中读出 8.75 美元的自然说法。"},{"role":"CUSTOMER","staff":false,"en":"It's Alex. Great, thanks!","vi":"Tên tôi là Alex. Tuyệt, cảm ơn bạn!","zh":"我叫 Alex。好的，谢谢！","vocab":[["It's (= It is)","là / tên là","是；名字是"],["Alex","tên riêng ví dụ","Alex（人名）"],["Great","tuyệt；được quá","太好了"],["thanks","cảm ơn","谢谢"]],"phrase":"Great, thanks! — Tuyệt, cảm ơn nhé! / 太好了，谢谢！","grammar":"“It’s Alex” là cách trả lời ngắn gọn, tự nhiên khi nhân viên hỏi tên ghi trên đơn hàng.","grammarZh":"店员询问订单姓名时，可以自然地简短回答 “It's Alex”。"}];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const UI = {"show":"👁 Hiện câu tiếng Anh","hide":"🙈 Ẩn câu tiếng Anh","listen":"🔊 Nghe phát âm","line":"Câu","meaning":"Nghĩa tiếng Việt","vocab":"Từ vựng theo từng câu","vhead":"Từ tiếng Anh","vmeaning":"Nghĩa tiếng Việt","phrase":"Cụm từ nên nhớ:","grammar":"Ghi chú ngữ pháp:","roles":["KHÁCH HÀNG","NHÂN VIÊN PHA CHẾ","THU NGÂN"],"audioError":"Trình duyệt chưa hỗ trợ đọc văn bản. Bạn hãy thử mở bằng phiên bản Chrome hoặc Safari mới nhất nhé.","phrase_head":"Cụm từ","phrase_desc":"Cách dùng","listen_head":"Nghe","phrases":[["Can I get…?","Cách gọi món tự nhiên và lịch sự.","Can I get"],["Would you like…?","Cách lịch sự để mời hoặc hỏi khách có muốn thêm món gì không.","Would you like"],["No meat, thanks.","Lịch sự nói rằng bạn không muốn món có thịt.","No meat, thanks."],["Anything to drink?","Hỏi khách có muốn gọi đồ uống không.","Anything to drink?"],["A splash of…","Yêu cầu thêm một lượng nhỏ chất lỏng.","A splash of"],["For here or to go?","Hỏi khách dùng tại chỗ hay mang đi.","For here or to go?"],["I'm in a bit of a hurry.","Giải thích tự nhiên rằng bạn đang hơi vội.","I'm in a bit of a hurry."],["Can I get a name for the order?","Hỏi tên để ghi lên đơn mang đi.","Can I get a name for the order?"]]};
+const MODE = "vi";
+const EN_GLOSS = {"Morning!":"A friendly greeting used in the morning.","What":"Asks for information about a thing.","can I get":"A common polite way to order something.","for you":"For the person being spoken to.","egg-and-cheese":"Made with egg and cheese.","sandwich":"Food served between or inside pieces of bread.","English muffin":"A small, round, flat bread, often split and toasted.","please":"A polite word used when asking for something.","Sure":"An informal way to say yes.","Would you like…?":"A polite way to offer or ask about a preference.","bacon":"Cured pork that is usually sliced and cooked.","sausage":"Seasoned ground meat in a casing or patty.","with that":"Together with the item just mentioned.","No meat":"Without meat.","thanks":"A casual way to say thank you.","just":"Only; no more than.","egg":"A common breakfast food.","cheese":"A food made from milk.","No problem":"A friendly way to say that something is okay.","Anything…?":"A short way to ask whether someone wants something.","to drink":"For drinking; a beverage.","medium":"A middle size, not small or large.","iced coffee":"Coffee served cold with ice.","a splash of":"A small amount of liquid.","oat milk":"A plant-based drink made from oats.","You got it":"An informal way to say “okay” or “certainly.”","for here":"To eat or drink at this location.","or":"Used to present a choice.","to go":"Prepared to take away from the shop.","I'm (= I am)":"A contraction meaning “I am.”","in a hurry":"Needing to do something quickly.","a bit":"A little; to a small degree.","Of course":"A polite way to agree or say yes.","a name for the order":"The name used to identify a customer’s order.","about":"Approximately; around.","five minutes":"A period of time lasting five minutes.","total":"The final amount to pay.","eight seventy-five":"A spoken way to say $8.75.","It's (= It is)":"A contraction meaning “it is.”","Alex":"A given name used here as an example.","Great":"An enthusiastic way to say something is good."};
+const EN_GRAMMAR = ["“What can I get for you?” is a friendly, common way for a café worker to ask for your order.","“Can I get…?” is very common in casual American ordering. “Please” makes the request polite.","“Would you like…?” is a polite way to offer a choice. “With that” means as part of the same order.","“Just…” is a natural way to clarify that you want only the items you named.","“Anything to drink?” is a shortened, conversational form of “Would you like anything to drink?”","“A splash of…” means a small amount of a liquid. In the US, cafés commonly offer oat milk as a dairy-free option.","“For here or to go?” is a very common question at American cafés and fast-casual restaurants.","“A bit” softens the statement and means “a little.” “I'm in a hurry” means you need to move quickly.","“Can I get a name for the order?” is a common way to label a takeout order. “Eight seventy-five” is a natural spoken way to say $8.75.","“It's Alex” is a natural short answer when staff ask for the name on an order."];
+const EN_SENTENCE_MEANINGS = ["A friendly way for a café worker to ask what you would like to order.","A polite request for an egg-and-cheese sandwich served on an English muffin.","The worker offers bacon or sausage as an extra item.","The customer politely says they do not want meat and clarifies the order.","The worker asks whether the customer would like a beverage.","The customer orders a medium iced coffee and asks for a little oat milk.","The worker confirms the order and asks whether it will be eaten here or taken away.","The customer says the order is takeout and explains they are a little rushed.","The worker asks what name to put on the order and gives an estimated wait and total.","The customer gives the name for the order and thanks the worker."];
+const roleName = role => role.includes("CASHIER") ? UI.roles[2] : (role.includes("BARISTA") || role.includes("EMPLOYEE")) ? UI.roles[1] : UI.roles[0];
+
+
+const phraseData = UI.phrases;
+const phraseTable = document.getElementById('phraseTable');
+if (phraseTable) phraseTable.innerHTML = `<tr><th>${esc(UI.phrase_head)}</th><th>${esc(UI.phrase_desc)}</th><th>${esc(UI.listen_head)}</th></tr>` + phraseData.map(p=>`<tr><td>${esc(p[0])}</td><td>${esc(p[1])}</td><td><button class="audio-word" data-say="${esc(p[2])}">🔊</button></td></tr>`).join('');
+
+const TARGET_PHRASES = ["What can I get", "Can I get…?", "Would you like…?", "No meat, thanks", "Anything to drink?", "a splash of oat milk", "for here or to go?", "in a bit of a hurry", "a name for the order", "It's Alex"];
+const root=document.getElementById('dialogues');
+lessons.forEach((x,i)=>{
+ const sec=document.createElement('section'); sec.className='card';
+ const rows=x.vocab.map(v=>{
+   const meaning=MODE==='en'?(EN_GLOSS[v[0]]||'A useful word or expression in this sentence.'):(MODE==='zh'?v[2]:v[1]);
+   return `<tr><td><div class="vocab-en"><span>${esc(v[0])}</span><button class="audio-word" data-say="${esc(v[0])}" aria-label="${esc(UI.vhead)} ${esc(v[0])}">🔊</button></div></td><td>${esc(meaning)}</td></tr>`;
+ }).join('');
+ const grammar=MODE==='en'?EN_GRAMMAR[i]:(MODE==='zh'?x.grammarZh:x.grammar);
+ const sentenceMeaning=MODE==='en'?EN_SENTENCE_MEANINGS[i]:(MODE==='zh'?x.zh:x.vi);
+ const phrase=MODE==='en'
+   ? ["Ask what the customer would like to order.","Use this common phrase to order food politely.","Offer a choice of add-ons.","Clarify that you want only the items named.","Ask whether the customer wants a drink.","Order a medium iced coffee with a little oat milk.","Ask whether the order is for here or takeout.","Explain that you are somewhat rushed.","Ask for the name on the order and give timing and price.","Give the name for the order and thank the worker."][i]
+   : (MODE==='zh' ? (x.phrase.split(' / ')[2] || x.phrase.split(' / ')[1] || x.phrase) : (x.phrase.includes(' — ') ? x.phrase.split(' — ')[1].split(' / ')[0].trim() : (x.phrase.split(' / ')[1] || x.phrase)));
+ sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div>
+ <div class="small-label">${esc(UI.line)} ${i+1}</div>
+ <div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div>
+ <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>
+ <p class="target-meaning-line"><strong>${esc(UI.meaning)}:</strong> <span class="meaning-text" id="meaningSentence${i}">${esc(sentenceMeaning)}</span><button type="button" class="meaning-toggle" data-meaning-toggle="meaningSentence${i}" data-show-label="Hiện nghĩa tiếng Việt" data-hide-label="Ẩn nghĩa tiếng Việt">Hiện nghĩa tiếng Việt</button></p>
+ <h3>${esc(UI.vocab)}</h3>
+ <table><tr><th>${esc(UI.vhead)}</th><th>${esc(UI.vmeaning)}</th></tr>${rows}</table>
+ <div class="explain"><p><strong>${esc(UI.phrase)}</strong> ${esc(TARGET_PHRASES[i])}</p><p><strong>${esc(UI.grammar)}</strong> ${esc(grammar)}</p></div>`;
+ root.appendChild(sec);
+});
+
+const fullRoleplay = [{"role":"BARISTA","en":"Morning! What can I get for you?","vi":"Chào buổi sáng! Tôi có thể lấy món gì cho bạn?","zh":"早上好！您想来点什么？"},{"role":"CUSTOMER","en":"Hi, can I get an egg-and-cheese sandwich on an English muffin, please?","vi":"Chào bạn, cho tôi một bánh sandwich trứng phô mai kẹp bánh muffin kiểu Anh nhé?","zh":"你好，我想要一个英式松饼夹鸡蛋和奶酪的三明治，谢谢。"},{"role":"BARISTA","en":"Sure. Would you like bacon or sausage with that?","vi":"Được chứ. Bạn có muốn thêm thịt xông khói hay xúc xích không?","zh":"好的。您想加培根还是香肠？"},{"role":"CUSTOMER","en":"No meat, thanks. Just egg and cheese.","vi":"Không cần thịt đâu, cảm ơn. Chỉ trứng và phô mai thôi.","zh":"不用加肉，谢谢。只要鸡蛋和奶酪就好。"},{"role":"BARISTA","en":"No problem. Anything to drink?","vi":"Không vấn đề gì. Bạn có muốn uống gì không?","zh":"没问题。您要喝点什么吗？"},{"role":"CUSTOMER","en":"A medium iced coffee with a splash of oat milk, please.","vi":"Cho tôi một cà phê đá cỡ vừa, thêm một chút sữa yến mạch nhé.","zh":"请给我一杯中杯冰咖啡，加一点燕麦奶。"},{"role":"BARISTA","en":"You got it. Is that for here or to go?","vi":"Được nhé. Bạn dùng tại đây hay mang đi?","zh":"好的。您是在这里吃，还是打包带走？"},{"role":"CUSTOMER","en":"To go, please. I'm in a bit of a hurry.","vi":"Cho tôi mang đi nhé. Tôi đang hơi vội.","zh":"打包带走，谢谢。我有点赶时间。"},{"role":"BARISTA","en":"Of course. Can I get a name for the order? It'll be about five minutes, and your total is eight seventy-five.","vi":"Được chứ. Cho tôi xin tên cho đơn hàng nhé? Khoảng năm phút là xong, tổng cộng là 8 đô la 75 xu.","zh":"当然可以。请问订单留什么名字？大约五分钟就好，一共是八美元七十五美分。"},{"role":"CUSTOMER","en":"It's Alex. Great, thanks!","vi":"Tên tôi là Alex. Tuyệt, cảm ơn bạn!","zh":"我叫 Alex。好的，谢谢！"}];
+const roleplayRoot=document.getElementById('fullRoleplay');
+fullRoleplay.forEach((x,i)=>{
+ const c=document.createElement('section'); c.className='card';
+ const meaning=MODE==='en'?EN_SENTENCE_MEANINGS[i]:(MODE==='zh'?x.zh:x.vi);
+ c.innerHTML=`<div class="role">${esc(roleName(x.role))}</div>
+ <div class="small-label">${esc(UI.line)} ${i+1}</div>
+ <div class="hidden-english" id="fullLine${i}"><p class="sentence">${esc(x.en)}</p></div>
+ <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>
+ <p class="target-meaning-line"><strong>${esc(UI.meaning)}:</strong> <span class="meaning-text" id="meaningFull${i}">${esc(meaning)}</span><button type="button" class="meaning-toggle" data-meaning-toggle="meaningFull${i}" data-show-label="Hiện nghĩa tiếng Việt" data-hide-label="Ẩn nghĩa tiếng Việt">Hiện nghĩa tiếng Việt</button></p>`;
+ roleplayRoot.appendChild(c);
+});
+let activeUtterance=null;
+function getVoice(){
+ const voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+ return voices.find(v=>/^en-US/i.test(v.lang)&&/Samantha|Ava|Jenny|Aria|Google US English/i.test(v.name))
+   || voices.find(v=>/^en-US/i.test(v.lang))
+   || voices.find(v=>/^en/i.test(v.lang));
+}
+function speak(text,button){
+ if(!('speechSynthesis' in window)){alert(UI.audioError);return;}
+ window.speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.92;u.pitch=1;
+ const voice=getVoice();if(voice)u.voice=voice;
+ activeUtterance=u;
+ button.setAttribute('aria-pressed','true');
+ u.onend=()=>{button.setAttribute('aria-pressed','false');activeUtterance=null;};
+ u.onerror=()=>{button.setAttribute('aria-pressed','false');activeUtterance=null;};
+ window.speechSynthesis.speak(u);
+}
+document.addEventListener('click',e=>{
+ const m=e.target.closest('[data-meaning-toggle]');
+ if(m){const el=document.getElementById(m.dataset.meaningToggle);if(!el)return;el.classList.toggle('show');const isShown=el.classList.contains('show');m.textContent=isShown?m.dataset.hideLabel:m.dataset.showLabel;return;}
+ const t=e.target.closest('[data-toggle]');
+ if(t){const el=document.getElementById(t.dataset.toggle);if(!el)return;el.classList.toggle('show');t.textContent=el.classList.contains("show")?UI.hide:UI.show;return;}
+ const b=e.target.closest('[data-say]');if(b)speak(b.dataset.say,b);
+});
+if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+</script>
+</body>
+</html>
