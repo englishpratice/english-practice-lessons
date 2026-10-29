@@ -49,7 +49,7 @@ body.role-zh .chinese, body.role-zh .translation {display:block}
 body.role-zh .translation{display:none!important} body.role-zh table td:nth-child(2){display:none} body.role-zh table td:nth-child(3),body.role-zh table th:nth-child(3){display:table-cell} body.role-zh .explain p:nth-child(2){display:none} body.role-zh .explain p:nth-child(1){display:block} body.role-zh .role{letter-spacing:.02em}
 
 body.role-zh .target-meaning{display:table-cell} body.role-zh table th:nth-child(4){display:table-cell}
-body.role-zh table td:nth-child(2),body.role-zh table th:nth-child(2){display:none} body.role-zh table td:nth-child(4),body.role-zh table th:nth-child(4){display:none}
+body.role-zh table td:nth-child(2),body.role-zh table th:nth-child(2){display:none} body.role-zh table td:nth-child(2),body.role-zh table th:nth-child(2),body.role-zh table td:nth-child(4),body.role-zh table th:nth-child(4){display:none}
 
 #phraseTable th:nth-child(2),#phraseTable td:nth-child(2),#phraseTable th:nth-child(3),#phraseTable td:nth-child(3){display:table-cell!important}
 
@@ -96,7 +96,7 @@ tr:nth-child(even) td{background:#fbfdff}
 <h2>第三部分：口语反应练习——完整情景对话</h2>
 <p><strong>练习方法：</strong>先听每一句，并在显示英文前尝试大声复述。然后按照对话顺序练习整段内容，可以轮流扮演顾客、店员和收银员。</p>
 <div class="notice">
-<strong>Bối cảnh / 情景说明：</strong> Bạn đang mua vài món đồ trong siêu thị Mỹ. Bạn hỏi nhân viên chỗ để trứng và bánh mì, sau đó mang đồ ra quầy thanh toán. Nhân viên hỏi bạn có tìm đủ đồ chưa và có cần túi không.<br>
+<strong>情景说明：</strong>
 你在美国的超市买一些食品。你先向店员询问鸡蛋和面包放在哪里，然后拿着商品去收银台结账。收银员会问你是否已经买齐所需物品，以及是否需要购物袋。
 </div>
 <div id="fullRoleplay"></div>
@@ -148,7 +148,7 @@ lessons.forEach((x,i)=>{
  const grammar=MODE==='en'?EN_GRAMMAR[i]:(MODE==='zh'?x.grammarZh:x.grammar);
  const sentenceMeaning=MODE==='en'?EN_SENTENCE_MEANINGS[i]:(MODE==='zh'?x.zh:x.vi);
  const phrase=MODE==='en'?(["Use ‘Where can I find…?’ to ask where an item is.","Say this when you understand.","Point out a specific location.","Say this when you are going to take something.","Ask whether someone found all needed items.","Say you only want the items shown.","Politely decline an offer.","Introduce the final amount to pay."][Math.min(i,7)]):(MODE==='zh'?(x.phrase.split(' / ')[1]||x.phrase):(x.phrase.split(' / ')[0]||x.phrase));
- sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div><div class="small-label">${MODE==='zh'?`第${i+1}句`:`${UI.line} ${i+1}`}</div><div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div><div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${UI.show}</button><button class="btn primary" data-say="${esc(x.en)}">${UI.listen} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" data-toggle="meaning${i}" data-label-show="👁 显示中文释义" data-label-hide="🙈 收起中文释义">👁 显示中文释义</button></div><div class="hidden-meaning" id="meaning${i}"><p class="target-meaning-line"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p></div><h3>${UI.vocab}</h3><table><tr><th>${UI.vhead}</th><th>Tiếng Việt</th><th>中文</th><th>${UI.vmeaning}</th></tr>${rows}</table><div class="explain"><p><strong>${UI.phrase}</strong> ${esc(x.en)} — ${esc(phrase)}</p><p><strong>${UI.grammar}</strong> ${esc(grammar)}</p><p>${esc(MODE==='zh'?x.grammarZh:MODE==='vi'?x.grammar:EN_GRAMMAR[i])}</p></div>`;
+ sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div><div class="small-label">${MODE==='zh'?`第${i+1}句`:`${UI.line} ${i+1}`}</div><div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div><div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${UI.show}</button><button class="btn primary" data-say="${esc(x.en)}">${UI.listen} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" data-toggle="meaning${i}" data-label-show="👁 显示中文释义" data-label-hide="🙈 收起中文释义">👁 显示中文释义</button></div><div class="hidden-meaning" id="meaning${i}"><p class="target-meaning-line"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p></div><h3>${UI.vocab}</h3><table><tr><th>${UI.vhead}</th><th>中文释义</th><th>中文</th><th>${UI.vmeaning}</th></tr>${rows}</table><div class="explain"><p><strong>${UI.phrase}</strong> ${esc(x.en)} — ${esc(phrase)}</p><p><strong>${UI.grammar}</strong> ${esc(grammar)}</p><p>${esc(MODE==='zh'?x.grammarZh:MODE==='vi'?x.grammar:EN_GRAMMAR[i])}</p></div>`;
  root.appendChild(sec);
 });
 const fullRoleplay = [
