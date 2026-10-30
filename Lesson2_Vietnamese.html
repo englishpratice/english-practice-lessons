@@ -19,7 +19,9 @@ h2{font-size:23px;line-height:1.25;margin:28px 0 12px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;margin:14px 0;box-shadow:0 2px 8px #17233408}
 .role{font-size:13px;font-weight:900;letter-spacing:.07em;margin-bottom:9px;color:var(--blue)}
 .role.staff{color:var(--green)}
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 8px}
+.meaning-controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.meaning-toggle{background:#eaf7ef;color:#12633a;border:1px solid #b7e1c5}
 button{font:inherit;cursor:pointer}
 .btn{border:0;border-radius:999px;padding:9px 13px;font-size:14px;font-weight:750;display:inline-flex;align-items:center;gap:6px}
 .primary{background:var(--blue);color:white}
@@ -55,14 +57,14 @@ body.role-en table td:nth-child(2),body.role-en table td:nth-child(3),body.role-
 #phraseTable th:nth-child(3),#phraseTable td:nth-child(3){display:table-cell!important}
 
 .target-meaning-line{display:block!important}
-.meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}.unused-meaning{display:none!important}
+.meaning-text{display:none;margin:8px 0 0;padding:10px 12px;background:#f0faf5;border-radius:8px}.meaning-text.show{display:block}.meaning-toggle{margin-left:0;background:#eaf7ef!important;color:#17633a!important;border:1px solid #b7e1c5!important}.unused-meaning{display:none!important}
 
 body.role-vi .unused-meaning, body.role-vi .chinese {display:none!important}
 body.role-vi table td:nth-child(3), body.role-vi table th:nth-child(3){display:none!important}
 #dialogues table th:nth-child(n+3), #dialogues table td:nth-child(n+3) {display:none!important}
 #phraseTable th:nth-child(2), #phraseTable td:nth-child(2), #phraseTable th:nth-child(3), #phraseTable td:nth-child(3) {display:table-cell!important}
 .target-meaning-line {display:block!important}
-.meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}
+.meaning-text{display:none;margin:8px 0 0;padding:10px 12px;background:#f0faf5;border-radius:8px}.meaning-text.show{display:block}.meaning-toggle{margin-left:0;background:#eaf7ef!important;color:#17633a!important;border:1px solid #b7e1c5!important}
 
 .back-wrap{max-width:1100px;margin:18px auto 0;padding:0 18px}.back-link{display:inline-flex;align-items:center;gap:9px;padding:11px 17px;border:1px solid #cbd8ee;border-radius:999px;background:#fff;color:#155eef;font-weight:800;text-decoration:none;box-shadow:0 3px 10px #1723340a;transition:background .2s,transform .2s}.back-link:hover{background:#edf4ff;transform:translateY(-1px)}.back-link:focus-visible{outline:3px solid #9bbcff;outline-offset:3px}@media(max-width:600px){.back-wrap{margin-top:12px;padding:0 14px}.back-link{font-size:14px;padding:10px 14px}}
 
@@ -140,8 +142,8 @@ lessons.forEach((x,i)=>{
  sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div>
  <div class="small-label">${esc(UI.line)} ${i+1}</div>
  <div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div>
- <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>
- <p class="target-meaning-line"><strong>${esc(UI.meaning)}:</strong> <span class="meaning-text" id="meaningSentence${i}">${esc(sentenceMeaning)}</span><button type="button" class="meaning-toggle" data-meaning-toggle="meaningSentence${i}" data-show-label="Hiện nghĩa tiếng Việt" data-hide-label="Ẩn nghĩa tiếng Việt">Hiện nghĩa tiếng Việt</button></p>
+ <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningSentence${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button></div>
+ <span class="meaning-text" id="meaningSentence${i}">${esc(sentenceMeaning)}</span>
  <h3>${esc(UI.vocab)}</h3>
  <table><tr><th>${esc(UI.vhead)}</th><th>${esc(UI.vmeaning)}</th></tr>${rows}</table>
  <div class="explain"><p><strong>${esc(UI.phrase)}</strong> ${esc(TARGET_PHRASES[i])}</p><p><strong>${esc(UI.grammar)}</strong> ${esc(grammar)}</p></div>`;
@@ -156,8 +158,8 @@ fullRoleplay.forEach((x,i)=>{
  c.innerHTML=`<div class="role">${esc(roleName(x.role))}</div>
  <div class="small-label">${esc(UI.line)} ${i+1}</div>
  <div class="hidden-english" id="fullLine${i}"><p class="sentence">${esc(x.en)}</p></div>
- <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>
- <p class="target-meaning-line"><strong>${esc(UI.meaning)}:</strong> <span class="meaning-text" id="meaningFull${i}">${esc(meaning)}</span><button type="button" class="meaning-toggle" data-meaning-toggle="meaningFull${i}" data-show-label="Hiện nghĩa tiếng Việt" data-hide-label="Ẩn nghĩa tiếng Việt">Hiện nghĩa tiếng Việt</button></p>`;
+ <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningFull${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button></div>
+ <span class="meaning-text" id="meaningFull${i}">${esc(meaning)}</span>`;
  roleplayRoot.appendChild(c);
 });
 let activeUtterance=null;
