@@ -19,9 +19,7 @@ h2{font-size:23px;line-height:1.25;margin:28px 0 12px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;margin:14px 0;box-shadow:0 2px 8px #17233408}
 .role{font-size:13px;font-weight:900;letter-spacing:.07em;margin-bottom:9px;color:var(--blue)}
 .role.staff{color:var(--green)}
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 8px}
-.meaning-controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
-.meaning-toggle{background:#eaf7ef;color:#12633a;border:1px solid #b7e1c5}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 button{font:inherit;cursor:pointer}
 .btn{border:0;border-radius:999px;padding:9px 13px;font-size:14px;font-weight:750;display:inline-flex;align-items:center;gap:6px}
 .primary{background:var(--blue);color:white}
@@ -57,14 +55,14 @@ body.role-en table td:nth-child(2),body.role-en table td:nth-child(3),body.role-
 #phraseTable th:nth-child(3),#phraseTable td:nth-child(3){display:table-cell!important}
 
 .target-meaning-line{display:block!important}
-.meaning-text{display:none;margin:8px 0 0;padding:10px 12px;background:#f0faf5;border-radius:8px}.meaning-text.show{display:block}.meaning-toggle{margin-left:0;background:#eaf7ef!important;color:#17633a!important;border:1px solid #b7e1c5!important}.unused-meaning{display:none!important}
+.meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}.unused-meaning{display:none!important}
 
 body.role-vi .unused-meaning, body.role-vi .chinese {display:none!important}
 body.role-vi table td:nth-child(3), body.role-vi table th:nth-child(3){display:none!important}
 #dialogues table th:nth-child(n+3), #dialogues table td:nth-child(n+3) {display:none!important}
 #phraseTable th:nth-child(2), #phraseTable td:nth-child(2), #phraseTable th:nth-child(3), #phraseTable td:nth-child(3) {display:table-cell!important}
 .target-meaning-line {display:block!important}
-.meaning-text{display:none;margin:8px 0 0;padding:10px 12px;background:#f0faf5;border-radius:8px}.meaning-text.show{display:block}.meaning-toggle{margin-left:0;background:#eaf7ef!important;color:#17633a!important;border:1px solid #b7e1c5!important}
+.meaning-text{display:none}.meaning-text.show{display:inline}.meaning-toggle{margin-left:8px;border:1px solid #c7d7fe;border-radius:999px;padding:5px 9px;background:#eaf1ff;color:#174ea6;font-size:12px;font-weight:750}
 
 .back-wrap{max-width:1100px;margin:18px auto 0;padding:0 18px}.back-link{display:inline-flex;align-items:center;gap:9px;padding:11px 17px;border:1px solid #cbd8ee;border-radius:999px;background:#fff;color:#155eef;font-weight:800;text-decoration:none;box-shadow:0 3px 10px #1723340a;transition:background .2s,transform .2s}.back-link:hover{background:#edf4ff;transform:translateY(-1px)}.back-link:focus-visible{outline:3px solid #9bbcff;outline-offset:3px}@media(max-width:600px){.back-wrap{margin-top:12px;padding:0 14px}.back-link{font-size:14px;padding:10px 14px}}
 
@@ -91,6 +89,17 @@ tr:nth-child(even) td{background:#fbfdff}
 .back-link{background:#fff5ed;border-color:#f7d2bd;color:#a94c22}
 @media(max-width:560px){h2{font-size:21px}.target-meaning-line{padding:9px 10px}}
 
+
+/* Personal sentence recording controls */
+.btn.delete-record-btn{background:#fff0f0;color:#b42318;border:1px solid #f3c7c4}
+.btn.delete-record-btn:disabled{opacity:.4;cursor:not-allowed}
+.record-status{line-height:1.45}
+
+.record-status{font-size:12px;color:var(--muted);margin:0 0 8px 2px;min-height:18px}
+.btn.record-btn{background:#fff0e6;color:#a94c22;border:1px solid #f7d2bd}
+.btn.play-record-btn{background:#eaf8f1;color:#137547;border:1px solid #b8e4cd}
+.btn.play-record-btn:disabled{opacity:.45;cursor:not-allowed}
+
 </style>
 </head>
 <body class="role-vi">
@@ -108,7 +117,7 @@ tr:nth-child(even) td{background:#fbfdff}
 <p><strong>Cách luyện:</strong> Nghe trước, nhắc lại từng câu thành tiếng, sau đó thử nói lại mà không nhìn câu tiếng Anh. Bạn có thể đổi vai khách hàng, nhân viên siêu thị và thu ngân.</p>
 <div class="notice"><strong>Bối cảnh:</strong> Bạn ghé một quán cà phê ở Mỹ vào buổi sáng để mua đồ ăn mang đi. Bạn gọi bánh sandwich trứng phô mai và cà phê đá, xác nhận không muốn thịt rồi cung cấp tên cho đơn hàng.</div>
 <div id="fullRoleplay"></div>
-<script type="text/plain" id="unused-practice-placeholder"></script>
+
 <footer><strong>Bài 2: Gọi bữa sáng mang đi ở Mỹ</strong><br>Hãy luyện đều đặn: nghe mỗi câu hai đến ba lần, nhắc lại thành tiếng rồi thử tự nói mà không nhìn bài.</footer>
 </main>
 <script>
@@ -142,8 +151,8 @@ lessons.forEach((x,i)=>{
  sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div>
  <div class="small-label">${esc(UI.line)} ${i+1}</div>
  <div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div>
- <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningSentence${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button></div>
- <span class="meaning-text" id="meaningSentence${i}">${esc(sentenceMeaning)}</span>
+ <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button><button type="button" class="btn record-btn" data-record-line="${i}">🎙 Thu âm giọng của tôi</button><button type="button" class="btn play-record-btn" data-play-line="${i}" disabled>▶ Nghe bản thu của tôi</button><button type="button" class="btn delete-record-btn" data-delete-line="${i}" disabled>🗑 Xóa bản thu</button></div><p class="record-status" data-record-status="${i}">Chưa có bản thu.</p>
+ <p class="target-meaning-line"><strong>${esc(UI.meaning)}:</strong> <span class="meaning-text" id="meaningSentence${i}">${esc(sentenceMeaning)}</span><button type="button" class="meaning-toggle" data-meaning-toggle="meaningSentence${i}" data-show-label="Hiện nghĩa tiếng Việt" data-hide-label="Ẩn nghĩa tiếng Việt">Hiện nghĩa tiếng Việt</button></p>
  <h3>${esc(UI.vocab)}</h3>
  <table><tr><th>${esc(UI.vhead)}</th><th>${esc(UI.vmeaning)}</th></tr>${rows}</table>
  <div class="explain"><p><strong>${esc(UI.phrase)}</strong> ${esc(TARGET_PHRASES[i])}</p><p><strong>${esc(UI.grammar)}</strong> ${esc(grammar)}</p></div>`;
@@ -158,8 +167,8 @@ fullRoleplay.forEach((x,i)=>{
  c.innerHTML=`<div class="role">${esc(roleName(x.role))}</div>
  <div class="small-label">${esc(UI.line)} ${i+1}</div>
  <div class="hidden-english" id="fullLine${i}"><p class="sentence">${esc(x.en)}</p></div>
- <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningFull${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button></div>
- <span class="meaning-text" id="meaningFull${i}">${esc(meaning)}</span>`;
+ <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>
+ <p class="target-meaning-line"><strong>${esc(UI.meaning)}:</strong> <span class="meaning-text" id="meaningFull${i}">${esc(meaning)}</span><button type="button" class="meaning-toggle" data-meaning-toggle="meaningFull${i}" data-show-label="Hiện nghĩa tiếng Việt" data-hide-label="Ẩn nghĩa tiếng Việt">Hiện nghĩa tiếng Việt</button></p>`;
  roleplayRoot.appendChild(c);
 });
 let activeUtterance=null;
@@ -188,6 +197,172 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-say]');if(b)speak(b.dataset.say,b);
 });
 if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+
+/* Personal voice recording feature */
+// Personal voice recordings: one latest recording per sentence, shared by all Lesson 2 language pages on this browser.
+const VOICE_REC_LABELS = {"record": "🎙 Thu âm giọng của tôi", "stop": "⏹ Dừng thu âm", "again": "🔁 Thu âm lại", "play": "▶ Nghe bản thu của tôi", "delete": "🗑 Xóa bản thu", "empty": "Chưa có bản thu.", "saved": "Đã lưu bản thu mới nhất.", "deleted": "Đã xóa bản thu.", "saving": "Đang lưu bản thu…", "recording": "Đang thu âm…", "permission": "Vui lòng cho phép trình duyệt sử dụng micro để thu âm.", "unsupported": "Trình duyệt này không hỗ trợ chức năng thu âm.", "confirmDelete": "Bạn có chắc muốn xóa bản thu này không?"};
+const VOICE_REC_DB = 'EnglishPracticeLesson2VoiceRecordings';
+const VOICE_REC_STORE = 'sentence-recordings';
+let voiceRecDbPromise = null;
+let activeVoiceRecorder = null;
+let activeVoiceStream = null;
+let activeVoiceLine = null;
+let activeVoiceChunks = [];
+
+function openVoiceRecDb(){
+  if(voiceRecDbPromise) return voiceRecDbPromise;
+  voiceRecDbPromise = new Promise((resolve,reject)=>{
+    const request = indexedDB.open(VOICE_REC_DB,1);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if(!db.objectStoreNames.contains(VOICE_REC_STORE)) db.createObjectStore(VOICE_REC_STORE);
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+  return voiceRecDbPromise;
+}
+async function getVoiceRecording(key){
+  const db = await openVoiceRecDb();
+  return new Promise((resolve,reject)=>{
+    const request = db.transaction(VOICE_REC_STORE,'readonly').objectStore(VOICE_REC_STORE).get(key);
+    request.onsuccess = ()=>resolve(request.result || null);
+    request.onerror = ()=>reject(request.error);
+  });
+}
+async function saveVoiceRecording(key,blob){
+  const db = await openVoiceRecDb();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(VOICE_REC_STORE,'readwrite');
+    tx.objectStore(VOICE_REC_STORE).put(blob,key);
+    tx.oncomplete = ()=>resolve();
+    tx.onerror = ()=>reject(tx.error);
+    tx.onabort = ()=>reject(tx.error);
+  });
+}
+function voiceRecStatus(line,message){
+  const el=document.querySelector(`[data-record-status="${line}"]`);
+  if(el) el.textContent=message;
+}
+async function refreshVoiceRecLine(line){
+  const play=document.querySelector(`[data-play-line="${line}"]`);
+  if(!play) return;
+  try{
+    const blob=await getVoiceRecording('line-'+line);
+    play.disabled=!blob;
+    voiceRecStatus(line,blob?VOICE_REC_LABELS.saved:VOICE_REC_LABELS.empty);
+    const rec=document.querySelector(`[data-record-line="${line}"]`);
+    if(rec) rec.textContent=blob?VOICE_REC_LABELS.again:VOICE_REC_LABELS.record;
+    const del=document.querySelector(`[data-delete-line="${line}"]`);
+    if(del) del.disabled=!blob;
+  }catch(err){
+    voiceRecStatus(line,VOICE_REC_LABELS.unsupported);
+  }
+}
+async function startVoiceRecording(line,button){
+  if(!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder){
+    voiceRecStatus(line,VOICE_REC_LABELS.unsupported); return;
+  }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    activeVoiceStream=stream; activeVoiceLine=line; activeVoiceChunks=[];
+    const options={};
+    if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
+    else if(MediaRecorder.isTypeSupported('audio/mp4')) options.mimeType='audio/mp4';
+    activeVoiceRecorder=new MediaRecorder(stream,options);
+    activeVoiceRecorder.ondataavailable=e=>{if(e.data && e.data.size) activeVoiceChunks.push(e.data);};
+    activeVoiceRecorder.onstop=async()=>{
+      const type=activeVoiceRecorder?.mimeType || activeVoiceChunks[0]?.type || 'audio/webm';
+      const blob=new Blob(activeVoiceChunks,{type});
+      try{
+        if(blob.size) await saveVoiceRecording('line-'+line,blob);
+        voiceRecStatus(line,VOICE_REC_LABELS.saved);
+        const play=document.querySelector(`[data-play-line="${line}"]`);
+        if(play) play.disabled=!blob.size;
+        const rec=document.querySelector(`[data-record-line="${line}"]`);
+        if(rec) rec.textContent=VOICE_REC_LABELS.again;
+        const del=document.querySelector(`[data-delete-line="${line}"]`);
+        if(del) del.disabled=false;
+      }catch(err){
+        voiceRecStatus(line,'Could not save recording. Please try again.');
+      }
+      stream.getTracks().forEach(track=>track.stop());
+      if(String(activeVoiceLine)===String(line)){activeVoiceRecorder=null;activeVoiceStream=null;activeVoiceLine=null;}
+    };
+    activeVoiceRecorder.start();
+    button.textContent=VOICE_REC_LABELS.stop;
+    voiceRecStatus(line,VOICE_REC_LABELS.recording);
+  }catch(err){
+    let message=VOICE_REC_LABELS.permission;
+    if(!window.isSecureContext) message='Microphone access requires a secure HTTPS page (or localhost).';
+    else if(err && err.name==='NotAllowedError') message=VOICE_REC_LABELS.permission;
+    else if(err && err.name==='NotFoundError') message='No microphone was found on this device.';
+    else if(err && err.name==='NotReadableError') message='The microphone is being used by another app.';
+    voiceRecStatus(line,message);
+    const rec=document.querySelector(`[data-record-line="${line}"]`);
+    if(rec) rec.textContent=VOICE_REC_LABELS.record;
+    if(activeVoiceStream) activeVoiceStream.getTracks().forEach(track=>track.stop());
+    activeVoiceRecorder=null;activeVoiceStream=null;activeVoiceLine=null;
+  }
+}
+function stopVoiceRecording(){
+  if(activeVoiceRecorder && activeVoiceRecorder.state!=='inactive'){
+    const line=activeVoiceLine;
+    const button=document.querySelector(`[data-record-line="${line}"]`);
+    if(button) button.textContent=VOICE_REC_LABELS.again;
+    voiceRecStatus(line,VOICE_REC_LABELS.saving);
+    activeVoiceRecorder.stop();
+  }
+}
+async function playVoiceRecording(line){
+  try{
+    const blob=await getVoiceRecording('line-'+line);
+    if(!blob){voiceRecStatus(line,VOICE_REC_LABELS.empty);return;}
+    const url=URL.createObjectURL(blob);
+    const audio=new Audio(url);
+    audio.onended=()=>URL.revokeObjectURL(url);
+    audio.onerror=()=>URL.revokeObjectURL(url);
+    await audio.play();
+  }catch(err){
+    voiceRecStatus(line,'Unable to play this recording. Please try again.');
+  }
+}
+async function deleteVoiceRecording(line){
+  if(!window.confirm(VOICE_REC_LABELS.confirmDelete)) return;
+  try{
+    const db=await openVoiceRecDb();
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(VOICE_REC_STORE,'readwrite');
+      tx.objectStore(VOICE_REC_STORE).delete('line-'+line);
+      tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error); tx.onabort=()=>reject(tx.error);
+    });
+    const play=document.querySelector(`[data-play-line="${line}"]`);
+    if(play) play.disabled=true;
+    const rec=document.querySelector(`[data-record-line="${line}"]`);
+    if(rec) rec.textContent=VOICE_REC_LABELS.record;
+    const del=document.querySelector(`[data-delete-line="${line}"]`);
+    if(del) del.disabled=true;
+    voiceRecStatus(line,VOICE_REC_LABELS.deleted);
+  }catch(err){voiceRecStatus(line,'Could not delete this recording. Please try again.');}
+}
+document.addEventListener('click',async e=>{
+  const recordButton=e.target.closest('[data-record-line]');
+  if(recordButton){
+    const line=recordButton.dataset.recordLine;
+    if(activeVoiceRecorder && activeVoiceRecorder.state==='recording'){
+      if(String(activeVoiceLine)===String(line)) stopVoiceRecording();
+      else voiceRecStatus(line,'Please stop the current recording first.');
+      return;
+    }
+    await startVoiceRecording(line,recordButton);
+    return;
+  }
+  const deleteButton=e.target.closest('[data-delete-line]');
+  if(deleteButton && !deleteButton.disabled){await deleteVoiceRecording(deleteButton.dataset.deleteLine);return;}
+  const playButton=e.target.closest('[data-play-line]');
+  if(playButton && !playButton.disabled) await playVoiceRecording(playButton.dataset.playLine);
+});
+document.querySelectorAll('[data-record-line]').forEach(button=>refreshVoiceRecLine(button.dataset.recordLine));
 </script>
 </body>
 </html>

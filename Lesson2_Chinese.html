@@ -80,6 +80,17 @@ tr:nth-child(even) td{background:#fbfdff}
 .back-link{background:#fff5ed;border-color:#f7d2bd;color:#a94c22}
 @media(max-width:560px){h2{font-size:21px}.target-meaning-line{padding:9px 10px}}
 
+
+/* Personal sentence recording controls */
+.btn.delete-record-btn{background:#fff0f0;color:#b42318;border:1px solid #f3c7c4}
+.btn.delete-record-btn:disabled{opacity:.4;cursor:not-allowed}
+.record-status{line-height:1.45}
+
+.record-status{font-size:12px;color:var(--muted);margin:0 0 8px 2px;min-height:18px}
+.btn.record-btn{background:#fff0e6;color:#a94c22;border:1px solid #f7d2bd}
+.btn.play-record-btn{background:#eaf8f1;color:#137547;border:1px solid #b8e4cd}
+.btn.play-record-btn:disabled{opacity:.45;cursor:not-allowed}
+
 </style>
 </head>
 <body class="role-zh">
@@ -100,7 +111,7 @@ tr:nth-child(even) td{background:#fbfdff}
 早上，你路过美国的一家咖啡店，准备买早餐带走。你点了鸡蛋奶酪英式松饼三明治和冰咖啡，说明不需要肉，并留下订单姓名。
 </div>
 <div id="fullRoleplay"></div>
-<script type="text/plain" id="unused-practice-placeholder"></script>
+
 <footer><strong>第1课 · 在美国买早餐外带</strong><br>学习建议：每句话先听两到三遍，再大声跟读，最后试着不看英文自己说出来。</footer>
 </main>
 <script>
@@ -125,7 +136,7 @@ lessons.forEach((x,i)=>{
  const grammar=MODE==='en'?EN_GRAMMAR[i]:(MODE==='zh'?x.grammarZh:x.grammar);
  const sentenceMeaning=MODE==='en'?EN_SENTENCE_MEANINGS[i]:(MODE==='zh'?x.zh:x.vi);
  const phrase=MODE==='en'?(["Ask what the customer would like to order.","Use this common phrase to order food politely.","Offer a choice of add-ons.","Clarify that you want only the items named.","Ask whether the customer wants a drink.","Order a medium iced coffee with a little oat milk.","Ask whether the order is for here or takeout.","Explain that you are somewhat rushed.","Ask for the name on the order and give timing and price.","Give the name for the order and thank the worker."][Math.min(i,9)]):(MODE==='zh'?(x.phrase.split(' / ')[1]||x.phrase):(x.phrase.split(' / ')[0]||x.phrase));
- sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div><div class="small-label">${MODE==='zh'?`第${i+1}句`:`${UI.line} ${i+1}`}</div><div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div><div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${UI.show}</button><button class="btn primary" data-say="${esc(x.en)}">${UI.listen} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" data-toggle="meaning${i}" data-label-show="👁 显示中文释义" data-label-hide="🙈 收起中文释义">👁 显示中文释义</button></div><div class="hidden-meaning" id="meaning${i}"><p class="target-meaning-line"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p></div><h3>${UI.vocab}</h3><table><tr><th>${UI.vhead}</th><th>中文释义</th><th>中文</th><th>${UI.vmeaning}</th></tr>${rows}</table><div class="explain"><p><strong>${UI.phrase}</strong> ${esc(TARGET_PHRASES[i])}</p><p><strong>${UI.grammar}</strong> ${esc(grammar)}</p><p>${esc(MODE==='zh'?x.grammarZh:MODE==='vi'?x.grammar:EN_GRAMMAR[i])}</p></div>`;
+ sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div><div class="small-label">${MODE==='zh'?`第${i+1}句`:`${UI.line} ${i+1}`}</div><div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div><div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${UI.show}</button><button class="btn primary" data-say="${esc(x.en)}">${UI.listen} ${i+1}</button><button type="button" class="btn record-btn" data-record-line="${i}">🎙 录制我的声音</button><button type="button" class="btn play-record-btn" data-play-line="${i}" disabled>▶ 播放我的录音</button><button type="button" class="btn delete-record-btn" data-delete-line="${i}" disabled>🗑 删除录音</button></div><p class="record-status" data-record-status="${i}">尚未录音。</p><div class="meaning-controls"><button class="btn meaning-toggle" data-toggle="meaning${i}" data-label-show="👁 显示中文释义" data-label-hide="🙈 收起中文释义">👁 显示中文释义</button></div><div class="hidden-meaning" id="meaning${i}"><p class="target-meaning-line"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p></div><h3>${UI.vocab}</h3><table><tr><th>${UI.vhead}</th><th>中文释义</th><th>中文</th><th>${UI.vmeaning}</th></tr>${rows}</table><div class="explain"><p><strong>${UI.phrase}</strong> ${esc(TARGET_PHRASES[i])}</p><p><strong>${UI.grammar}</strong> ${esc(grammar)}</p><p>${esc(MODE==='zh'?x.grammarZh:MODE==='vi'?x.grammar:EN_GRAMMAR[i])}</p></div>`;
  root.appendChild(sec);
 });
 const fullRoleplay = [{"role":"BARISTA","en":"Morning! What can I get for you?","vi":"Chào buổi sáng! Tôi có thể lấy món gì cho bạn?","zh":"早上好！您想来点什么？"},{"role":"CUSTOMER","en":"Hi, can I get an egg-and-cheese sandwich on an English muffin, please?","vi":"Chào bạn, cho tôi một bánh sandwich trứng phô mai kẹp bánh muffin kiểu Anh nhé?","zh":"你好，我想要一个英式松饼夹鸡蛋和奶酪的三明治，谢谢。"},{"role":"BARISTA","en":"Sure. Would you like bacon or sausage with that?","vi":"Được chứ. Bạn có muốn thêm thịt xông khói hay xúc xích không?","zh":"好的。您想加培根还是香肠？"},{"role":"CUSTOMER","en":"No meat, thanks. Just egg and cheese.","vi":"Không cần thịt đâu, cảm ơn. Chỉ trứng và phô mai thôi.","zh":"不用加肉，谢谢。只要鸡蛋和奶酪就好。"},{"role":"BARISTA","en":"No problem. Anything to drink?","vi":"Không vấn đề gì. Bạn có muốn uống gì không?","zh":"没问题。您要喝点什么吗？"},{"role":"CUSTOMER","en":"A medium iced coffee with a splash of oat milk, please.","vi":"Cho tôi một cà phê đá cỡ vừa, thêm một chút sữa yến mạch nhé.","zh":"请给我一杯中杯冰咖啡，加一点燕麦奶。"},{"role":"BARISTA","en":"You got it. Is that for here or to go?","vi":"Được nhé. Bạn dùng tại đây hay mang đi?","zh":"好的。您是在这里吃，还是打包带走？"},{"role":"CUSTOMER","en":"To go, please. I'm in a bit of a hurry.","vi":"Cho tôi mang đi nhé. Tôi đang hơi vội.","zh":"打包带走，谢谢。我有点赶时间。"},{"role":"BARISTA","en":"Of course. Can I get a name for the order? It'll be about five minutes, and your total is eight seventy-five.","vi":"Được chứ. Cho tôi xin tên cho đơn hàng nhé? Khoảng năm phút là xong, tổng cộng là 8 đô la 75 xu.","zh":"当然可以。请问订单留什么名字？大约五分钟就好，一共是八美元七十五美分。"},{"role":"CUSTOMER","en":"It's Alex. Great, thanks!","vi":"Tên tôi là Alex. Tuyệt, cảm ơn bạn!","zh":"我叫 Alex。好的，谢谢！"}];
@@ -155,6 +166,172 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-say]');if(b)speak(b.dataset.say,b);
 });
 if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+
+/* Personal voice recording feature */
+// Personal voice recordings: one latest recording per sentence, shared by all Lesson 2 language pages on this browser.
+const VOICE_REC_LABELS = {"record": "🎙 录制我的声音", "stop": "⏹ 停止录音", "again": "🔁 重新录音", "play": "▶ 播放我的录音", "delete": "🗑 删除录音", "empty": "尚未录音。", "saved": "已保存最新录音。", "deleted": "录音已删除。", "saving": "正在保存录音…", "recording": "正在录音…", "permission": "请允许浏览器使用麦克风进行录音。", "unsupported": "此浏览器不支持录音功能。", "confirmDelete": "确定删除这段录音吗？"};
+const VOICE_REC_DB = 'EnglishPracticeLesson2VoiceRecordings';
+const VOICE_REC_STORE = 'sentence-recordings';
+let voiceRecDbPromise = null;
+let activeVoiceRecorder = null;
+let activeVoiceStream = null;
+let activeVoiceLine = null;
+let activeVoiceChunks = [];
+
+function openVoiceRecDb(){
+  if(voiceRecDbPromise) return voiceRecDbPromise;
+  voiceRecDbPromise = new Promise((resolve,reject)=>{
+    const request = indexedDB.open(VOICE_REC_DB,1);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if(!db.objectStoreNames.contains(VOICE_REC_STORE)) db.createObjectStore(VOICE_REC_STORE);
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+  return voiceRecDbPromise;
+}
+async function getVoiceRecording(key){
+  const db = await openVoiceRecDb();
+  return new Promise((resolve,reject)=>{
+    const request = db.transaction(VOICE_REC_STORE,'readonly').objectStore(VOICE_REC_STORE).get(key);
+    request.onsuccess = ()=>resolve(request.result || null);
+    request.onerror = ()=>reject(request.error);
+  });
+}
+async function saveVoiceRecording(key,blob){
+  const db = await openVoiceRecDb();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(VOICE_REC_STORE,'readwrite');
+    tx.objectStore(VOICE_REC_STORE).put(blob,key);
+    tx.oncomplete = ()=>resolve();
+    tx.onerror = ()=>reject(tx.error);
+    tx.onabort = ()=>reject(tx.error);
+  });
+}
+function voiceRecStatus(line,message){
+  const el=document.querySelector(`[data-record-status="${line}"]`);
+  if(el) el.textContent=message;
+}
+async function refreshVoiceRecLine(line){
+  const play=document.querySelector(`[data-play-line="${line}"]`);
+  if(!play) return;
+  try{
+    const blob=await getVoiceRecording('line-'+line);
+    play.disabled=!blob;
+    voiceRecStatus(line,blob?VOICE_REC_LABELS.saved:VOICE_REC_LABELS.empty);
+    const rec=document.querySelector(`[data-record-line="${line}"]`);
+    if(rec) rec.textContent=blob?VOICE_REC_LABELS.again:VOICE_REC_LABELS.record;
+    const del=document.querySelector(`[data-delete-line="${line}"]`);
+    if(del) del.disabled=!blob;
+  }catch(err){
+    voiceRecStatus(line,VOICE_REC_LABELS.unsupported);
+  }
+}
+async function startVoiceRecording(line,button){
+  if(!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder){
+    voiceRecStatus(line,VOICE_REC_LABELS.unsupported); return;
+  }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    activeVoiceStream=stream; activeVoiceLine=line; activeVoiceChunks=[];
+    const options={};
+    if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
+    else if(MediaRecorder.isTypeSupported('audio/mp4')) options.mimeType='audio/mp4';
+    activeVoiceRecorder=new MediaRecorder(stream,options);
+    activeVoiceRecorder.ondataavailable=e=>{if(e.data && e.data.size) activeVoiceChunks.push(e.data);};
+    activeVoiceRecorder.onstop=async()=>{
+      const type=activeVoiceRecorder?.mimeType || activeVoiceChunks[0]?.type || 'audio/webm';
+      const blob=new Blob(activeVoiceChunks,{type});
+      try{
+        if(blob.size) await saveVoiceRecording('line-'+line,blob);
+        voiceRecStatus(line,VOICE_REC_LABELS.saved);
+        const play=document.querySelector(`[data-play-line="${line}"]`);
+        if(play) play.disabled=!blob.size;
+        const rec=document.querySelector(`[data-record-line="${line}"]`);
+        if(rec) rec.textContent=VOICE_REC_LABELS.again;
+        const del=document.querySelector(`[data-delete-line="${line}"]`);
+        if(del) del.disabled=false;
+      }catch(err){
+        voiceRecStatus(line,'Could not save recording. Please try again.');
+      }
+      stream.getTracks().forEach(track=>track.stop());
+      if(String(activeVoiceLine)===String(line)){activeVoiceRecorder=null;activeVoiceStream=null;activeVoiceLine=null;}
+    };
+    activeVoiceRecorder.start();
+    button.textContent=VOICE_REC_LABELS.stop;
+    voiceRecStatus(line,VOICE_REC_LABELS.recording);
+  }catch(err){
+    let message=VOICE_REC_LABELS.permission;
+    if(!window.isSecureContext) message='Microphone access requires a secure HTTPS page (or localhost).';
+    else if(err && err.name==='NotAllowedError') message=VOICE_REC_LABELS.permission;
+    else if(err && err.name==='NotFoundError') message='No microphone was found on this device.';
+    else if(err && err.name==='NotReadableError') message='The microphone is being used by another app.';
+    voiceRecStatus(line,message);
+    const rec=document.querySelector(`[data-record-line="${line}"]`);
+    if(rec) rec.textContent=VOICE_REC_LABELS.record;
+    if(activeVoiceStream) activeVoiceStream.getTracks().forEach(track=>track.stop());
+    activeVoiceRecorder=null;activeVoiceStream=null;activeVoiceLine=null;
+  }
+}
+function stopVoiceRecording(){
+  if(activeVoiceRecorder && activeVoiceRecorder.state!=='inactive'){
+    const line=activeVoiceLine;
+    const button=document.querySelector(`[data-record-line="${line}"]`);
+    if(button) button.textContent=VOICE_REC_LABELS.again;
+    voiceRecStatus(line,VOICE_REC_LABELS.saving);
+    activeVoiceRecorder.stop();
+  }
+}
+async function playVoiceRecording(line){
+  try{
+    const blob=await getVoiceRecording('line-'+line);
+    if(!blob){voiceRecStatus(line,VOICE_REC_LABELS.empty);return;}
+    const url=URL.createObjectURL(blob);
+    const audio=new Audio(url);
+    audio.onended=()=>URL.revokeObjectURL(url);
+    audio.onerror=()=>URL.revokeObjectURL(url);
+    await audio.play();
+  }catch(err){
+    voiceRecStatus(line,'Unable to play this recording. Please try again.');
+  }
+}
+async function deleteVoiceRecording(line){
+  if(!window.confirm(VOICE_REC_LABELS.confirmDelete)) return;
+  try{
+    const db=await openVoiceRecDb();
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(VOICE_REC_STORE,'readwrite');
+      tx.objectStore(VOICE_REC_STORE).delete('line-'+line);
+      tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error); tx.onabort=()=>reject(tx.error);
+    });
+    const play=document.querySelector(`[data-play-line="${line}"]`);
+    if(play) play.disabled=true;
+    const rec=document.querySelector(`[data-record-line="${line}"]`);
+    if(rec) rec.textContent=VOICE_REC_LABELS.record;
+    const del=document.querySelector(`[data-delete-line="${line}"]`);
+    if(del) del.disabled=true;
+    voiceRecStatus(line,VOICE_REC_LABELS.deleted);
+  }catch(err){voiceRecStatus(line,'Could not delete this recording. Please try again.');}
+}
+document.addEventListener('click',async e=>{
+  const recordButton=e.target.closest('[data-record-line]');
+  if(recordButton){
+    const line=recordButton.dataset.recordLine;
+    if(activeVoiceRecorder && activeVoiceRecorder.state==='recording'){
+      if(String(activeVoiceLine)===String(line)) stopVoiceRecording();
+      else voiceRecStatus(line,'Please stop the current recording first.');
+      return;
+    }
+    await startVoiceRecording(line,recordButton);
+    return;
+  }
+  const deleteButton=e.target.closest('[data-delete-line]');
+  if(deleteButton && !deleteButton.disabled){await deleteVoiceRecording(deleteButton.dataset.deleteLine);return;}
+  const playButton=e.target.closest('[data-play-line]');
+  if(playButton && !playButton.disabled) await playVoiceRecording(playButton.dataset.playLine);
+});
+document.querySelectorAll('[data-record-line]').forEach(button=>refreshVoiceRecLine(button.dataset.recordLine));
 </script>
 </body>
 </html>
