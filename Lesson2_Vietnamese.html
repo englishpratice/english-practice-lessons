@@ -98,7 +98,7 @@ tr:nth-child(even) td{background:#fbfdff}
 .record-start{background:#fff4e8;color:#9a4b16;border:1px solid #f3c99e}
 .record-stop{background:#fff0f0;color:#b42318;border:1px solid #f3b6b6}
 .record-play{background:#eaf7ef;color:#137547;border:1px solid #b7e1c5}
-.record-delete{background:#fef3f2;color:#b42318;border:1px solid #fecdca}
+.record-download{background:#eef4ff;color:#174ea6;border:1px solid #c7d7fe}\n.record-delete{background:#fef3f2;color:#111111;border:1px solid #fecdca}
 .record-status{font-size:12px;color:var(--muted);width:100%;margin:0 2px}
 .recording-tools button:disabled{opacity:.45;cursor:not-allowed}
 
@@ -138,7 +138,7 @@ const phraseTable = document.getElementById('phraseTable');
 if (phraseTable) phraseTable.innerHTML = `<tr><th>${esc(UI.phrase_head)}</th><th>${esc(UI.phrase_desc)}</th><th>${esc(UI.listen_head)}</th></tr>` + phraseData.map(p=>`<tr><td>${esc(p[0])}</td><td>${esc(p[1])}</td><td><button class="audio-word" data-say="${esc(p[2])}">🔊</button></td></tr>`).join('');
 
 const TARGET_PHRASES = ["What can I get", "Can I get…?", "Would you like…?", "No meat, thanks", "Anything to drink?", "a splash of oat milk", "for here or to go?", "in a bit of a hurry", "a name for the order", "It's Alex"];
-const RECORDING_LABELS = {"record": "🎙 Thu âm giọng của tôi", "stop": "⏹ Dừng thu âm", "play": "▶ Nghe bản thu", "delete": "🗑 Xóa bản thu", "empty": "Chưa có bản thu.", "ready": "Đã lưu bản thu. Bạn có thể nghe lại hoặc thu âm lại.", "recording": "Đang thu âm… Hãy đọc câu tiếng Anh.", "saving": "Đang lưu bản thu…", "deleted": "Đã xóa bản thu.", "mic": "Trình duyệt chưa được cấp quyền sử dụng micro. Hãy cho phép micro trong cài đặt trình duyệt rồi tải lại trang.", "unsupported": "Trình duyệt này không hỗ trợ chức năng thu âm.", "failed": "Không thể thu âm. Vui lòng kiểm tra micro và quyền truy cập.", "confirm": "Bạn có chắc muốn xóa bản thu này không?"};
+const RECORDING_LABELS = {"record": "🎙 Thu âm giọng của tôi", "rerecord": "🎙 Thu âm lại", "stop": "⏹ Dừng thu âm", "play": "▶ Nghe bản thu", "download": "⬇ Tải bản thu xuống", "delete": "🗑 Xóa bản thu", "empty": "Chưa có bản thu.", "ready": "Đã lưu bản thu. Bạn có thể nghe lại hoặc thu âm lại.", "recording": "Đang thu âm… Hãy đọc câu tiếng Anh.", "saving": "Đang lưu bản thu…", "deleted": "Đã xóa bản thu.", "mic": "Trình duyệt chưa được cấp quyền sử dụng micro. Hãy cho phép micro trong cài đặt trình duyệt rồi tải lại trang.", "unsupported": "Trình duyệt này không hỗ trợ chức năng thu âm.", "failed": "Không thể thu âm. Vui lòng kiểm tra micro và quyền truy cập.", "confirm": "Bạn có chắc muốn xóa bản thu này không?"};
 const root=document.getElementById('dialogues');
 lessons.forEach((x,i)=>{
  const sec=document.createElement('section'); sec.className='card';
@@ -245,8 +245,8 @@ async function deleteSentenceRecording(key){
 function recordingElements(key){
  const safe=key.replace(/[^a-zA-Z0-9_-]/g,'');
  return {
-  start:document.querySelector(`[data-rec-start="${safe}"]`),
-  stop:document.querySelector(`[data-rec-stop="${safe}"]`),
+  start:document.querySelector(`[data-rec-toggle="${safe}"]`),
+  stop:document.querySelector(`[data-rec-toggle="${safe}"]`),
   play:document.querySelector(`[data-rec-play="${safe}"]`),
   del:document.querySelector(`[data-rec-delete="${safe}"]`),
   status:document.querySelector(`[data-rec-status="${safe}"]`)
@@ -254,7 +254,7 @@ function recordingElements(key){
 }
 function setRecordingStatus(key,message){const el=recordingElements(key).status;if(el)el.textContent=message;}
 function setRecordingAvailability(key,hasRecording){
- const el=recordingElements(key);if(el.play)el.play.disabled=!hasRecording;if(el.del)el.del.disabled=!hasRecording;
+ const el=recordingElements(key);if(el.play)el.play.disabled=!hasRecording;if(el.del)el.del.disabled=!hasRecording;const dl=document.querySelector(`[data-rec-download="${key}"]`);if(dl)dl.disabled=!hasRecording;
 }
 async function refreshRecording(key){
  try{
@@ -272,7 +272,7 @@ async function startSentenceRecording(key){
  }
  const el=recordingElements(key);
  if(!el.start||!el.stop)return;
- el.start.disabled=true;
+ el.start.disabled=false;
  try{
   const stream=await navigator.mediaDevices.getUserMedia({audio:true});
   let options={};
@@ -282,22 +282,22 @@ async function startSentenceRecording(key){
   const chunks=[];
   activeRecording={key,recorder,stream,chunks};
   recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
-  recorder.onerror=()=>{stream.getTracks().forEach(t=>t.stop());activeRecording=null;el.start.disabled=false;el.stop.disabled=true;setRecordingStatus(key,RECORDING_LABELS.failed);};
+  recorder.onerror=()=>{stream.getTracks().forEach(t=>t.stop());activeRecording=null;el.start.disabled=false;el.stop.disabled=true;el.start.textContent=RECORDING_LABELS.record;delete el.start.dataset.recording;setRecordingStatus(key,RECORDING_LABELS.failed);};
   recorder.onstop=async()=>{
    stream.getTracks().forEach(t=>t.stop());
    const type=recorder.mimeType||chunks[0]?.type||'audio/webm';
    const blob=new Blob(chunks,{type});
-   activeRecording=null;el.start.disabled=false;el.stop.disabled=true;
+   activeRecording=null;el.start.disabled=false;el.stop.disabled=true;el.start.textContent=RECORDING_LABELS.rerecord;delete el.start.dataset.recording;
    if(!blob.size){setRecordingStatus(key,RECORDING_LABELS.failed);return;}
    setRecordingStatus(key,RECORDING_LABELS.saving);
-   try{await saveSentenceRecording(key,blob);setRecordingAvailability(key,true);setRecordingStatus(key,RECORDING_LABELS.ready);}
+   try{await saveSentenceRecording(key,blob);setRecordingAvailability(key,true);el.start.disabled=false;el.start.textContent=RECORDING_LABELS.rerecord;setRecordingStatus(key,RECORDING_LABELS.ready);}
    catch(err){setRecordingStatus(key,RECORDING_LABELS.failed);}
   };
-  el.stop.disabled=false;
+  el.stop.disabled=false;el.start.textContent=RECORDING_LABELS.stop;el.start.dataset.recording="true";
   setRecordingStatus(key,RECORDING_LABELS.recording);
   recorder.start();
  }catch(err){
-  el.start.disabled=false;el.stop.disabled=true;
+  el.start.disabled=false;el.stop.disabled=true;el.start.textContent=RECORDING_LABELS.record;delete el.start.dataset.recording;
   setRecordingStatus(key,err?.name==='NotAllowedError'||err?.name==='SecurityError'?RECORDING_LABELS.mic:RECORDING_LABELS.failed);
  }
 }
@@ -311,6 +311,14 @@ async function playSentenceRecording(key){
   audio.play().catch(()=>setRecordingStatus(key,RECORDING_LABELS.failed));
  }catch(err){setRecordingStatus(key,RECORDING_LABELS.failed);}
 }
+async function downloadSentenceRecording(key){
+ try{
+  const blob=await getSentenceRecording(key);if(!blob){setRecordingStatus(key,RECORDING_LABELS.empty);return;}
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=`lesson2-${key}-recording.${(blob.type||'audio/webm').includes('mp4')?'mp4':'webm'}`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }catch(err){setRecordingStatus(key,RECORDING_LABELS.failed);}
+}
 async function removeSentenceRecording(key){
  if(!window.confirm(RECORDING_LABELS.confirm))return;
  try{
@@ -322,16 +330,16 @@ async function removeSentenceRecording(key){
 function recordingControls(index){
  const key=`lesson2-sentence-${index}`;
  return `<div class="recording-tools" aria-label="Personal voice recording">
- <button type="button" class="btn record-start" data-rec-start="${key}">${RECORDING_LABELS.record}</button>
- <button type="button" class="btn record-stop" data-rec-stop="${key}" disabled>${RECORDING_LABELS.stop}</button>
+ <button type="button" class="btn record-start" data-rec-toggle="${key}">${RECORDING_LABELS.record}</button>
  <button type="button" class="btn record-play" data-rec-play="${key}" disabled>${RECORDING_LABELS.play}</button>
+ <button type="button" class="btn record-download" data-rec-download="${key}" disabled>${RECORDING_LABELS.download}</button>
  <button type="button" class="btn record-delete" data-rec-delete="${key}" disabled>${RECORDING_LABELS.delete}</button>
  <span class="record-status" data-rec-status="${key}" aria-live="polite">${RECORDING_LABELS.empty}</span></div>`;
 }
 document.addEventListener('click',e=>{
- const start=e.target.closest('[data-rec-start]');if(start){startSentenceRecording(start.dataset.recStart);return;}
- const stop=e.target.closest('[data-rec-stop]');if(stop){const key=stop.dataset.recStop;if(activeRecording?.key===key&&activeRecording.recorder.state!=='inactive'){stop.disabled=true;activeRecording.recorder.stop();setRecordingStatus(key,RECORDING_LABELS.saving);}return;}
+ const toggle=e.target.closest('[data-rec-toggle]');if(toggle){const key=toggle.dataset.recToggle;if(activeRecording?.key===key&&activeRecording.recorder.state!=='inactive'){activeRecording.recorder.stop();toggle.disabled=false;setRecordingStatus(key,RECORDING_LABELS.saving);}else{startSentenceRecording(key);}return;}
  const play=e.target.closest('[data-rec-play]');if(play){playSentenceRecording(play.dataset.recPlay);return;}
+ const dl=e.target.closest('[data-rec-download]');if(dl){downloadSentenceRecording(dl.dataset.recDownload);return;}
  const del=e.target.closest('[data-rec-delete]');if(del){removeSentenceRecording(del.dataset.recDelete);return;}
 });
 document.addEventListener('DOMContentLoaded',()=>{for(let i=0;i<10;i++)refreshRecording(`lesson2-sentence-${i}`);});

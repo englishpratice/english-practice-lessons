@@ -82,13 +82,13 @@ tr:nth-child(even) td{background:#fbfdff}
 
 
 /* Personal sentence recording controls */
-.btn.delete-record-btn{background:#fff0f0;color:#b42318;border:1px solid #f3c7c4}
+.btn.delete-record-btn{background:#fff0f0;color:#111111;border:1px solid #f3c7c4}
 .btn.delete-record-btn:disabled{opacity:.4;cursor:not-allowed}
 .record-status{line-height:1.45}
 
 .record-status{font-size:12px;color:var(--muted);margin:0 0 8px 2px;min-height:18px}
 .btn.record-btn{background:#fff0e6;color:#a94c22;border:1px solid #f7d2bd}
-.btn.play-record-btn{background:#eaf8f1;color:#137547;border:1px solid #b8e4cd}
+.btn.download-record-btn{background:#eef4ff;color:#174ea6;border:1px solid #c7d7fe}\n.btn.download-record-btn:disabled{opacity:.45;cursor:not-allowed}\n.btn.play-record-btn{background:#ffffff;color:#08783f;border:1.5px solid #a8d9bd;border-radius:999px;padding:10px 18px;font-weight:700}
 .btn.play-record-btn:disabled{opacity:.45;cursor:not-allowed}
 
 </style>
@@ -132,7 +132,7 @@ lessons.forEach((x,i)=>{
  const grammar=MODE==='en'?EN_GRAMMAR[i]:(MODE==='zh'?x.grammarZh:x.grammar);
  const sentenceMeaning=MODE==='en'?EN_SENTENCE_MEANINGS[i]:(MODE==='zh'?x.zh:x.vi);
  const phrase=MODE==='en'?(["Ask what the customer would like to order.","Use this common phrase to order food politely.","Offer a choice of add-ons.","Clarify that you want only the items named.","Ask whether the customer wants a drink.","Order a medium iced coffee with a little oat milk.","Ask whether the order is for here or takeout.","Explain that you are somewhat rushed.","Ask for the name on the order and give timing and price.","Give the name for the order and thank the worker."][Math.min(i,9)]):(MODE==='zh'?(x.phrase.split(' / ')[1]||x.phrase):(x.phrase.split(' / ')[0]||x.phrase));
- sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div><div class="small-label">${UI.line} ${i+1}</div><div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div><div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${UI.show}</button><button class="btn primary" data-say="${esc(x.en)}">${UI.listen} ${i+1}</button><button type="button" class="btn record-btn" data-record-line="${i}">🎙 Record my voice</button><button type="button" class="btn play-record-btn" data-play-line="${i}" disabled>▶ Play my recording</button><button type="button" class="btn delete-record-btn" data-delete-line="${i}" disabled>🗑 Delete recording</button></div><p class="record-status" data-record-status="${i}">No recording yet.</p><p class="target-meaning-line"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p><p class="unused-meaning"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p><h3>${UI.vocab}</h3><table><tr><th>${UI.vhead}</th><th>Tiếng Việt</th><th>中文</th><th>${UI.vmeaning}</th></tr>${rows}</table><div class="explain"><p><strong>${UI.phrase}</strong> ${esc(x.en)} — ${esc(phrase)}</p><p><strong>${UI.grammar}</strong> ${esc(grammar)}</p><p>${esc(MODE==='zh'?x.grammarZh:MODE==='vi'?x.grammar:EN_GRAMMAR[i])}</p></div>`;
+ sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div><div class="small-label">${UI.line} ${i+1}</div><div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div><div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${UI.show}</button><button class="btn primary" data-say="${esc(x.en)}">${UI.listen} ${i+1}</button></div><div class="controls recording-controls"><button type="button" class="btn record-btn" data-record-line="${i}">🎙 Record my voice</button><button type="button" class="btn play-record-btn" data-play-line="${i}" disabled>▶ Play my recording</button><button type="button" class="btn download-record-btn" data-download-line="${i}" disabled>⬇ Download recording</button><button type="button" class="btn delete-record-btn" data-delete-line="${i}" disabled>🗑 Delete recording</button></div><p class="record-status" data-record-status="${i}">No recording yet.</p><p class="target-meaning-line"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p><p class="unused-meaning"><strong>${UI.meaning}:</strong> ${esc(sentenceMeaning)}</p><h3>${UI.vocab}</h3><table><tr><th>${UI.vhead}</th><th>Tiếng Việt</th><th>中文</th><th>${UI.vmeaning}</th></tr>${rows}</table><div class="explain"><p><strong>${UI.phrase}</strong> ${esc(x.en)} — ${esc(phrase)}</p><p><strong>${UI.grammar}</strong> ${esc(grammar)}</p><p>${esc(MODE==='zh'?x.grammarZh:MODE==='vi'?x.grammar:EN_GRAMMAR[i])}</p></div>`;
  root.appendChild(sec);
 });
 const fullRoleplay = [{"role":"BARISTA","en":"Morning! What can I get for you?","vi":"Chào buổi sáng! Tôi có thể lấy món gì cho bạn?","zh":"早上好！您想来点什么？"},{"role":"CUSTOMER","en":"Hi, can I get an egg-and-cheese sandwich on an English muffin, please?","vi":"Chào bạn, cho tôi một bánh sandwich trứng phô mai kẹp bánh muffin kiểu Anh nhé?","zh":"你好，我想要一个英式松饼夹鸡蛋和奶酪的三明治，谢谢。"},{"role":"BARISTA","en":"Sure. Would you like bacon or sausage with that?","vi":"Được chứ. Bạn có muốn thêm thịt xông khói hay xúc xích không?","zh":"好的。您想加培根还是香肠？"},{"role":"CUSTOMER","en":"No meat, thanks. Just egg and cheese.","vi":"Không cần thịt đâu, cảm ơn. Chỉ trứng và phô mai thôi.","zh":"不用加肉，谢谢。只要鸡蛋和奶酪就好。"},{"role":"BARISTA","en":"No problem. Anything to drink?","vi":"Không vấn đề gì. Bạn có muốn uống gì không?","zh":"没问题。您要喝点什么吗？"},{"role":"CUSTOMER","en":"A medium iced coffee with a splash of oat milk, please.","vi":"Cho tôi một cà phê đá cỡ vừa, thêm một chút sữa yến mạch nhé.","zh":"请给我一杯中杯冰咖啡，加一点燕麦奶。"},{"role":"BARISTA","en":"You got it. Is that for here or to go?","vi":"Được nhé. Bạn dùng tại đây hay mang đi?","zh":"好的。您是在这里吃，还是打包带走？"},{"role":"CUSTOMER","en":"To go, please. I'm in a bit of a hurry.","vi":"Cho tôi mang đi nhé. Tôi đang hơi vội.","zh":"打包带走，谢谢。我有点赶时间。"},{"role":"BARISTA","en":"Of course. Can I get a name for the order? It'll be about five minutes, and your total is eight seventy-five.","vi":"Được chứ. Cho tôi xin tên cho đơn hàng nhé? Khoảng năm phút là xong, tổng cộng là 8 đô la 75 xu.","zh":"当然可以。请问订单留什么名字？大约五分钟就好，一共是八美元七十五美分。"},{"role":"CUSTOMER","en":"It's Alex. Great, thanks!","vi":"Tên tôi là Alex. Tuyệt, cảm ơn bạn!","zh":"我叫 Alex。好的，谢谢！"}];
@@ -165,7 +165,7 @@ if('speechSynthesis' in window) window.speechSynthesis.getVoices();
 
 /* Personal voice recording feature */
 // Personal voice recordings: one latest recording per sentence, shared by all Lesson 2 language pages on this browser.
-const VOICE_REC_LABELS = {"record": "🎙 Record my voice", "stop": "⏹ Stop recording", "again": "🔁 Record again", "play": "▶ Play my recording", "delete": "🗑 Delete recording", "empty": "No recording yet.", "saved": "Latest recording saved.", "deleted": "Recording deleted.", "saving": "Saving recording…", "recording": "Recording…", "permission": "Please allow microphone access to record.", "unsupported": "This browser does not support audio recording.", "confirmDelete": "Delete this recording?"};
+const VOICE_REC_LABELS = {"record": "🎙 Record my voice", "stop": "⏹ Stop recording", "again": "🔁 Record again", "play": "▶ Play my recording", "download": "⬇ Download recording", "delete": "🗑 Delete recording", "empty": "No recording yet.", "saved": "Latest recording saved.", "deleted": "Recording deleted.", "saving": "Saving recording…", "recording": "Recording…", "permission": "Please allow microphone access to record.", "unsupported": "This browser does not support audio recording.", "confirmDelete": "Delete this recording?"};
 const VOICE_REC_DB = 'EnglishPracticeLesson2VoiceRecordings';
 const VOICE_REC_STORE = 'sentence-recordings';
 let voiceRecDbPromise = null;
@@ -220,6 +220,8 @@ async function refreshVoiceRecLine(line){
     if(rec) rec.textContent=blob?VOICE_REC_LABELS.again:VOICE_REC_LABELS.record;
     const del=document.querySelector(`[data-delete-line="${line}"]`);
     if(del) del.disabled=!blob;
+    const download=document.querySelector(`[data-download-line="${line}"]`);
+    if(download) download.disabled=!blob;
   }catch(err){
     voiceRecStatus(line,VOICE_REC_LABELS.unsupported);
   }
@@ -248,6 +250,8 @@ async function startVoiceRecording(line,button){
         if(rec) rec.textContent=VOICE_REC_LABELS.again;
         const del=document.querySelector(`[data-delete-line="${line}"]`);
         if(del) del.disabled=false;
+        const download=document.querySelector(`[data-download-line="${line}"]`);
+        if(download) download.disabled=false;
       }catch(err){
         voiceRecStatus(line,'Could not save recording. Please try again.');
       }
@@ -292,6 +296,17 @@ async function playVoiceRecording(line){
     voiceRecStatus(line,'Unable to play this recording. Please try again.');
   }
 }
+async function downloadVoiceRecording(line){
+  try{
+    const blob=await getVoiceRecording('line-'+line);
+    if(!blob){voiceRecStatus(line,VOICE_REC_LABELS.empty);return;}
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=`lesson2-sentence-${Number(line)+1}-recording.${(blob.type||'audio/webm').includes('mp4')?'mp4':'webm'}`;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(err){voiceRecStatus(line,'Unable to download this recording. Please try again.');}
+}
 async function deleteVoiceRecording(line){
   if(!window.confirm(VOICE_REC_LABELS.confirmDelete)) return;
   try{
@@ -307,6 +322,8 @@ async function deleteVoiceRecording(line){
     if(rec) rec.textContent=VOICE_REC_LABELS.record;
     const del=document.querySelector(`[data-delete-line="${line}"]`);
     if(del) del.disabled=true;
+    const download=document.querySelector(`[data-download-line="${line}"]`);
+    if(download) download.disabled=true;
     voiceRecStatus(line,VOICE_REC_LABELS.deleted);
   }catch(err){voiceRecStatus(line,'Could not delete this recording. Please try again.');}
 }
@@ -322,6 +339,8 @@ document.addEventListener('click',async e=>{
     await startVoiceRecording(line,recordButton);
     return;
   }
+  const downloadButton=e.target.closest('[data-download-line]');
+  if(downloadButton && !downloadButton.disabled){await downloadVoiceRecording(downloadButton.dataset.downloadLine);return;}
   const deleteButton=e.target.closest('[data-delete-line]');
   if(deleteButton && !deleteButton.disabled){await deleteVoiceRecording(deleteButton.dataset.deleteLine);return;}
   const playButton=e.target.closest('[data-play-line]');
