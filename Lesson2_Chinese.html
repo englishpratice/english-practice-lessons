@@ -303,17 +303,57 @@ function stopVoiceRecording(){
     activeVoiceRecorder.stop();
   }
 }
-async function playVoiceRecording(line){
+let activeVoicePlayback=null;
+let voicePlaybackRequest=0;
+
+function stopVoicePlayback(){
+  voicePlaybackRequest++;
+  if(!activeVoicePlayback)return;
+  const playback=activeVoicePlayback;
+  activeVoicePlayback=null;
+  playback.audio.pause();
+  playback.audio.currentTime=0;
+  playback.button.textContent='▶ 播放我的录音';
+  playback.audio.onended=null;
+  playback.audio.onerror=null;
+  URL.revokeObjectURL(playback.url);
+}
+
+async function playVoiceRecording(line,button){
+  // Clicking the currently playing recording stops it and restores the original icon.
+  if(activeVoicePlayback && String(activeVoicePlayback.line)===String(line)){
+    stopVoicePlayback();
+    return;
+  }
+  // Only one personal recording plays at a time.
+  stopVoicePlayback();
+  const requestId=++voicePlaybackRequest;
   try{
     const blob=await getVoiceRecording('line-'+line);
+    if(requestId!==voicePlaybackRequest)return;
     if(!blob){voiceRecStatus(line,VOICE_REC_LABELS.empty);return;}
     const url=URL.createObjectURL(blob);
     const audio=new Audio(url);
-    audio.onended=()=>URL.revokeObjectURL(url);
-    audio.onerror=()=>URL.revokeObjectURL(url);
+    activeVoicePlayback={line:String(line),audio,url,button};
+    button.textContent='Ⅱ 正在播放';
+    const finish=()=>{
+      if(activeVoicePlayback && activeVoicePlayback.audio===audio){
+        activeVoicePlayback=null;
+        button.textContent='▶ 播放我的录音';
+      }
+      URL.revokeObjectURL(url);
+    };
+    audio.onended=finish;
+    audio.onerror=()=>{
+      finish();
+      voiceRecStatus(line,'Unable to play this recording. Please try again.');
+    };
     await audio.play();
   }catch(err){
-    voiceRecStatus(line,'Unable to play this recording. Please try again.');
+    if(requestId===voicePlaybackRequest){
+      if(activeVoicePlayback && String(activeVoicePlayback.line)===String(line))stopVoicePlayback();
+      voiceRecStatus(line,'Unable to play this recording. Please try again.');
+    }
   }
 }
 async function downloadVoiceRecording(line){
@@ -328,6 +368,7 @@ async function downloadVoiceRecording(line){
   }catch(err){voiceRecStatus(line,'Unable to download this recording. Please try again.');}
 }
 async function deleteVoiceRecording(line){
+  if(activeVoicePlayback && String(activeVoicePlayback.line)===String(line))stopVoicePlayback();
   if(!window.confirm(VOICE_REC_LABELS.confirmDelete)) return;
   try{
     const db=await openVoiceRecDb();
@@ -364,7 +405,7 @@ document.addEventListener('click',async e=>{
   const deleteButton=e.target.closest('[data-delete-line]');
   if(deleteButton && !deleteButton.disabled){await deleteVoiceRecording(deleteButton.dataset.deleteLine);return;}
   const playButton=e.target.closest('[data-play-line]');
-  if(playButton && !playButton.disabled) await playVoiceRecording(playButton.dataset.playLine);
+  if(playButton && !playButton.disabled) await playVoiceRecording(playButton.dataset.playLine,playButton);
 });
 document.querySelectorAll('[data-record-line]').forEach(button=>refreshVoiceRecLine(button.dataset.recordLine));
 </script>
