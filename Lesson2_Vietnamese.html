@@ -102,7 +102,7 @@ tr:nth-child(even) td{background:#fbfdff}
 .record-status{font-size:12px;color:var(--muted);width:100%;margin:0 2px}
 .recording-tools button:disabled{opacity:.45;cursor:not-allowed}
 
-</style>
+.meaning-audio{background:#eaf7ef!important;color:#17633a!important;border:1px solid #b7e1c5!important;border-radius:999px!important;min-width:42px;justify-content:center;padding:9px 12px}</style>
 </head>
 <body class="role-vi">
  <div class="back-wrap"><a class="back-link" href="./" aria-label="← Quay lại danh sách bài học">← Quay lại danh sách bài học</a></div>
@@ -154,7 +154,7 @@ lessons.forEach((x,i)=>{
  sec.innerHTML=`<div class="role ${x.staff?'staff':''}">${esc(roleName(x.role))}</div>
  <div class="small-label">${esc(UI.line)} ${i+1}</div>
  <div class="hidden-english" id="sentence${i}"><p class="sentence">${esc(x.en)}</p></div>
- <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>${recordingControls(i)}<div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningSentence${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button></div>
+ <div class="controls"><button class="btn secondary" data-toggle="sentence${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div>${recordingControls(i)}<div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningSentence${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button><button type="button" class="btn meaning-audio" data-say-meaning="${esc(sentenceMeaning)}" data-meaning-lang="vi-VN" aria-label="Đọc nghĩa tiếng Việt" title="Đọc nghĩa tiếng Việt">🔊</button></div>
  <span class="meaning-text" id="meaningSentence${i}">${esc(sentenceMeaning)}</span>
  <h3>${esc(UI.vocab)}</h3>
  <table><tr><th>${esc(UI.vhead)}</th><th>${esc(UI.vmeaning)}</th></tr>${rows}</table>
@@ -170,7 +170,7 @@ fullRoleplay.forEach((x,i)=>{
  c.innerHTML=`<div class="role">${esc(roleName(x.role))}</div>
  <div class="small-label">${esc(UI.line)} ${i+1}</div>
  <div class="hidden-english" id="fullLine${i}"><p class="sentence">${esc(x.en)}</p></div>
- <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningFull${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button></div>
+ <div class="controls"><button class="btn secondary" data-toggle="fullLine${i}">${esc(UI.show)}</button><button class="btn primary" data-say="${esc(x.en)}">${esc(UI.listen)} ${i+1}</button></div><div class="meaning-controls"><button class="btn meaning-toggle" type="button" data-meaning-toggle="meaningFull${i}" data-show-label="👁 Hiện nghĩa tiếng Việt" data-hide-label="🙈 Ẩn nghĩa tiếng Việt">👁 Hiện nghĩa tiếng Việt</button><button type="button" class="btn meaning-audio" data-say-meaning="${esc(meaning)}" data-meaning-lang="vi-VN" aria-label="Đọc nghĩa tiếng Việt" title="Đọc nghĩa tiếng Việt">🔊</button></div>
  <span class="meaning-text" id="meaningFull${i}">${esc(meaning)}</span>`;
  roleplayRoot.appendChild(c);
 });
@@ -192,7 +192,24 @@ function speak(text,button){
  u.onerror=()=>{button.setAttribute('aria-pressed','false');activeUtterance=null;};
  window.speechSynthesis.speak(u);
 }
+function speakMeaning(text,button,lang){
+ if(!('speechSynthesis' in window)){alert(UI.audioError||"Trình duyệt chưa hỗ trợ đọc văn bản.");return;}
+ const synth=window.speechSynthesis;
+ synth.cancel();
+ const u=new SpeechSynthesisUtterance(text);
+ u.lang='vi-VN';u.rate=0.9;u.pitch=1;
+ const voices=synth.getVoices();
+ const voice=voices.find(v=>/^vi(-|_)?VN$/i.test(v.lang))
+   || voices.find(v=>/^vi\b/i.test(v.lang));
+ if(voice)u.voice=voice;
+ button.setAttribute('aria-pressed','true');
+ u.onend=()=>button.setAttribute('aria-pressed','false');
+ u.onerror=()=>button.setAttribute('aria-pressed','false');
+ synth.speak(u);
+}
+
 document.addEventListener('click',e=>{
+ const meaningAudio=e.target.closest('[data-say-meaning]');if(meaningAudio){speakMeaning(meaningAudio.dataset.sayMeaning,meaningAudio,meaningAudio.dataset.meaningLang);return}
  const m=e.target.closest('[data-meaning-toggle]');
  if(m){const el=document.getElementById(m.dataset.meaningToggle);if(!el)return;el.classList.toggle('show');const isShown=el.classList.contains('show');m.textContent=isShown?m.dataset.hideLabel:m.dataset.showLabel;return;}
  const t=e.target.closest('[data-toggle]');
