@@ -167,7 +167,7 @@ if('speechSynthesis' in window) window.speechSynthesis.getVoices();
 
 /* Personal voice recording feature */
 // Personal voice recordings: one latest recording per sentence, shared by all Lesson 2 language pages on this browser.
-const VOICE_REC_LABELS = {"record": "🎙 Record my voice", "stop": "⏹ Stop recording", "again": "🔁 Record again", "play": "▶ Play my recording", "download": "⬇ Download recording", "delete": "🗑 Delete recording", "empty": "No recording yet.", "saved": "Latest recording saved.", "deleted": "Recording deleted.", "saving": "Saving recording…", "recording": "Recording…", "permission": "Please allow microphone access to record.", "unsupported": "This browser does not support audio recording.", "confirmDelete": "Delete this recording?"};
+const VOICE_REC_LABELS = {"record": "🎙 Record my voice", "stop": "⏹ Stop recording", "again": "🔁 Record again", "play": "▶ Play my recording", "download": "⬇ Download M4A", "delete": "🗑 Delete recording", "empty": "No recording yet.", "saved": "Latest recording saved.", "deleted": "Recording deleted.", "saving": "Saving recording…", "recording": "Recording…", "permission": "Please allow microphone access to record.", "unsupported": "This browser does not support audio recording.", "confirmDelete": "Delete this recording?", "m4aUnsupported": "This recording is not in M4A format. Please record again using Safari on your iPhone to create an M4A file."};
 const VOICE_REC_DB = 'EnglishPracticeLesson2VoiceRecordings';
 const VOICE_REC_STORE = 'sentence-recordings';
 let voiceRecDbPromise = null;
@@ -236,8 +236,8 @@ async function startVoiceRecording(line,button){
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
     activeVoiceStream=stream; activeVoiceLine=line; activeVoiceChunks=[];
     const options={};
-    if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
-    else if(MediaRecorder.isTypeSupported('audio/mp4')) options.mimeType='audio/mp4';
+    if(MediaRecorder.isTypeSupported('audio/mp4')) options.mimeType='audio/mp4';
+    else if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
     activeVoiceRecorder=new MediaRecorder(stream,options);
     activeVoiceRecorder.ondataavailable=e=>{if(e.data && e.data.size) activeVoiceChunks.push(e.data);};
     activeVoiceRecorder.onstop=async()=>{
@@ -302,11 +302,15 @@ async function downloadVoiceRecording(line){
   try{
     const blob=await getVoiceRecording('line-'+line);
     if(!blob){voiceRecStatus(line,VOICE_REC_LABELS.empty);return;}
+    const mime=(blob.type||'').toLowerCase();
+    if(!mime.includes('mp4') && !mime.includes('m4a')){
+      voiceRecStatus(line,VOICE_REC_LABELS.m4aUnsupported);return;
+    }
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
-    a.href=url;a.download=`lesson2-sentence-${Number(line)+1}-recording.${(blob.type||'audio/webm').includes('mp4')?'mp4':'webm'}`;
+    a.href=url;a.download=`lesson2-sentence-${Number(line)+1}-recording.m4a`;
     document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
   }catch(err){voiceRecStatus(line,'Unable to download this recording. Please try again.');}
 }
 async function deleteVoiceRecording(line){

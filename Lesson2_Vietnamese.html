@@ -138,7 +138,7 @@ const phraseTable = document.getElementById('phraseTable');
 if (phraseTable) phraseTable.innerHTML = `<tr><th>${esc(UI.phrase_head)}</th><th>${esc(UI.phrase_desc)}</th><th>${esc(UI.listen_head)}</th></tr>` + phraseData.map(p=>`<tr><td>${esc(p[0])}</td><td>${esc(p[1])}</td><td><button class="audio-word" data-say="${esc(p[2])}">🔊</button></td></tr>`).join('');
 
 const TARGET_PHRASES = ["What can I get", "Can I get…?", "Would you like…?", "No meat, thanks", "Anything to drink?", "a splash of oat milk", "for here or to go?", "in a bit of a hurry", "a name for the order", "It's Alex"];
-const RECORDING_LABELS = {"record": "🎙 Thu âm giọng của tôi", "rerecord": "🎙 Thu âm lại", "stop": "⏹ Dừng thu âm", "play": "▶ Nghe bản thu", "download": "⬇ Tải bản thu xuống", "delete": "🗑 Xóa bản thu", "empty": "Chưa có bản thu.", "ready": "Đã lưu bản thu. Bạn có thể nghe lại hoặc thu âm lại.", "recording": "Đang thu âm… Hãy đọc câu tiếng Anh.", "saving": "Đang lưu bản thu…", "deleted": "Đã xóa bản thu.", "mic": "Trình duyệt chưa được cấp quyền sử dụng micro. Hãy cho phép micro trong cài đặt trình duyệt rồi tải lại trang.", "unsupported": "Trình duyệt này không hỗ trợ chức năng thu âm.", "failed": "Không thể thu âm. Vui lòng kiểm tra micro và quyền truy cập.", "confirm": "Bạn có chắc muốn xóa bản thu này không?"};
+const RECORDING_LABELS = {"record": "🎙 Thu âm giọng của tôi", "rerecord": "🎙 Thu âm lại", "stop": "⏹ Dừng thu âm", "play": "▶ Nghe bản thu", "download": "⬇ Tải bản thu xuống", "delete": "🗑 Xóa bản thu", "empty": "Chưa có bản thu.", "ready": "Đã lưu bản thu. Bạn có thể nghe lại hoặc thu âm lại.", "recording": "Đang thu âm… Hãy đọc câu tiếng Anh.", "saving": "Đang lưu bản thu…", "deleted": "Đã xóa bản thu.", "mic": "Trình duyệt chưa được cấp quyền sử dụng micro. Hãy cho phép micro trong cài đặt trình duyệt rồi tải lại trang.", "unsupported": "Trình duyệt này không hỗ trợ chức năng thu âm.", "failed": "Không thể thu âm. Vui lòng kiểm tra micro và quyền truy cập.", "confirm": "Bạn có chắc muốn xóa bản thu này không?", "m4aUnsupported": "Bản thu này không phải định dạng M4A nên chưa thể tải bằng nút này. Hãy thu âm lại bằng Safari trên iPhone, sau đó tải xuống nhé."};
 const root=document.getElementById('dialogues');
 lessons.forEach((x,i)=>{
  const sec=document.createElement('section'); sec.className='card';
@@ -192,15 +192,25 @@ function speak(text,button){
  u.onerror=()=>{button.setAttribute('aria-pressed','false');activeUtterance=null;};
  window.speechSynthesis.speak(u);
 }
+function getVietnameseVoice(){
+ const voices=window.speechSynthesis.getVoices();
+ const viVoices=voices.filter(v=>/^vi(-|_)?VN$/i.test(v.lang)||/^vi\b/i.test(v.lang));
+ if(!viVoices.length)return null;
+ // Prefer an explicitly Southern Vietnamese female voice when the device exposes one.
+ const southern=viVoices.filter(v=>/southern|south vietnamese|miền nam|mien nam|sài gòn|sai gon/i.test(v.name+' '+v.voiceURI));
+ const femalePattern=/female|woman|women|nữ|hoaimy|hoài my|linh|mai|lan/i;
+ return southern.find(v=>femalePattern.test(v.name+' '+v.voiceURI))
+   || southern[0]
+   || viVoices.find(v=>femalePattern.test(v.name+' '+v.voiceURI))
+   || viVoices[0];
+}
 function speakMeaning(text,button,lang){
  if(!('speechSynthesis' in window)){alert(UI.audioError||"Trình duyệt chưa hỗ trợ đọc văn bản.");return;}
  const synth=window.speechSynthesis;
  synth.cancel();
  const u=new SpeechSynthesisUtterance(text);
- u.lang='vi-VN';u.rate=0.9;u.pitch=1;
- const voices=synth.getVoices();
- const voice=voices.find(v=>/^vi(-|_)?VN$/i.test(v.lang))
-   || voices.find(v=>/^vi\b/i.test(v.lang));
+ u.lang=lang||'vi-VN';u.rate=0.9;u.pitch=1;
+ const voice=getVietnameseVoice();
  if(voice)u.voice=voice;
  button.setAttribute('aria-pressed','true');
  u.onend=()=>button.setAttribute('aria-pressed','false');
@@ -225,6 +235,7 @@ const RECORDING_STORE = 'sentence-audio';
 let recordingDBPromise = null;
 let activeRecording = null;
 const recordingUrls = new Map();
+let activeSentencePlayback = null;
 
 function openRecordingDB(){
  if(!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB is unavailable'));
@@ -293,8 +304,10 @@ async function startSentenceRecording(key){
  try{
   const stream=await navigator.mediaDevices.getUserMedia({audio:true});
   let options={};
-  if(MediaRecorder.isTypeSupported?.('audio/webm;codecs=opus'))options.mimeType='audio/webm;codecs=opus';
-  else if(MediaRecorder.isTypeSupported?.('audio/mp4'))options.mimeType='audio/mp4';
+  // Prefer MP4/AAC so iPhone Safari recordings are genuine M4A files.
+  // WebM is only a fallback on browsers that do not support MP4 recording.
+  if(MediaRecorder.isTypeSupported?.('audio/mp4'))options.mimeType='audio/mp4';
+  else if(MediaRecorder.isTypeSupported?.('audio/webm;codecs=opus'))options.mimeType='audio/webm;codecs=opus';
   const recorder=new MediaRecorder(stream,options);
   const chunks=[];
   activeRecording={key,recorder,stream,chunks};
@@ -318,15 +331,27 @@ async function startSentenceRecording(key){
   setRecordingStatus(key,err?.name==='NotAllowedError'||err?.name==='SecurityError'?RECORDING_LABELS.mic:RECORDING_LABELS.failed);
  }
 }
-async function playSentenceRecording(key){
+function resetActiveSentencePlayback(){
+ if(!activeSentencePlayback)return;
+ const current=activeSentencePlayback;activeSentencePlayback=null;
+ current.audio.pause();try{current.audio.currentTime=0;}catch(e){}
+ if(current.button){current.button.textContent=current.button.dataset.originalLabel||current.button.textContent.replace(/^Ⅱ/,'▶');delete current.button.dataset.originalLabel;current.button.setAttribute('aria-pressed','false');}
+ const savedUrl=recordingUrls.get(current.key);if(savedUrl){URL.revokeObjectURL(savedUrl);recordingUrls.delete(current.key);}
+}
+async function playSentenceRecording(key,button){
+ // Tap the same button to stop; tap another sentence to switch playback.
+ if(activeSentencePlayback&&activeSentencePlayback.key===key){resetActiveSentencePlayback();return;}
+ if(activeSentencePlayback)resetActiveSentencePlayback();
  try{
   const blob=await getSentenceRecording(key);if(!blob){setRecordingAvailability(key,false);setRecordingStatus(key,RECORDING_LABELS.empty);return;}
-  const old=recordingUrls.get(key);if(old)URL.revokeObjectURL(old);
   const url=URL.createObjectURL(blob);recordingUrls.set(key,url);
   const audio=new Audio(url);
-  audio.onerror=()=>setRecordingStatus(key,RECORDING_LABELS.failed);
-  audio.play().catch(()=>setRecordingStatus(key,RECORDING_LABELS.failed));
- }catch(err){setRecordingStatus(key,RECORDING_LABELS.failed);}
+  if(button){button.dataset.originalLabel=button.textContent;button.textContent=button.textContent.replace(/^▶/,'Ⅱ');button.setAttribute('aria-pressed','true');}
+  activeSentencePlayback={key,audio,button};
+  audio.onended=()=>{if(activeSentencePlayback?.audio===audio)resetActiveSentencePlayback();};
+  audio.onerror=()=>{if(activeSentencePlayback?.audio===audio){resetActiveSentencePlayback();setRecordingStatus(key,RECORDING_LABELS.failed);}};
+  await audio.play();
+ }catch(err){if(activeSentencePlayback?.key===key)resetActiveSentencePlayback();setRecordingStatus(key,RECORDING_LABELS.failed);}
 }
 async function downloadSentenceRecording(key){
  try{
@@ -355,7 +380,7 @@ function recordingControls(index){
 }
 document.addEventListener('click',e=>{
  const toggle=e.target.closest('[data-rec-toggle]');if(toggle){const key=toggle.dataset.recToggle;if(activeRecording?.key===key&&activeRecording.recorder.state!=='inactive'){activeRecording.recorder.stop();toggle.disabled=false;setRecordingStatus(key,RECORDING_LABELS.saving);}else{startSentenceRecording(key);}return;}
- const play=e.target.closest('[data-rec-play]');if(play){playSentenceRecording(play.dataset.recPlay);return;}
+ const play=e.target.closest('[data-rec-play]');if(play){playSentenceRecording(play.dataset.recPlay,play);return;}
  const dl=e.target.closest('[data-rec-download]');if(dl){downloadSentenceRecording(dl.dataset.recDownload);return;}
  const del=e.target.closest('[data-rec-delete]');if(del){removeSentenceRecording(del.dataset.recDelete);return;}
 });

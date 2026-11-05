@@ -185,7 +185,7 @@ if('speechSynthesis' in window) window.speechSynthesis.getVoices();
 
 /* Personal voice recording feature */
 // Personal voice recordings: one latest recording per sentence, shared by all Lesson 2 language pages on this browser.
-const VOICE_REC_LABELS = {"record": "🎙 录制我的声音", "stop": "⏹ 停止录音", "again": "🔁 重新录音", "play": "▶ 播放我的录音", "download": "⬇ 下载录音", "delete": "🗑 删除录音", "empty": "尚未录音。", "saved": "已保存最新录音。", "deleted": "录音已删除。", "saving": "正在保存录音…", "recording": "正在录音…", "permission": "请允许浏览器使用麦克风进行录音。", "unsupported": "此浏览器不支持录音功能。", "confirmDelete": "确定删除这段录音吗？"};
+const VOICE_REC_LABELS = {"record": "🎙 录制我的声音", "stop": "⏹ 停止录音", "again": "🔁 重新录音", "play": "▶ 播放我的录音", "download": "⬇ 下载 M4A", "delete": "🗑 删除录音", "empty": "尚未录音。", "saved": "已保存最新录音。", "deleted": "录音已删除。", "saving": "正在保存录音…", "recording": "正在录音…", "permission": "请允许浏览器使用麦克风进行录音。", "unsupported": "此浏览器不支持录音功能。", "confirmDelete": "确定删除这段录音吗？", "m4aUnsupported": "这段录音不是 M4A 格式。请使用 iPhone 上的 Safari 重新录音，以生成 M4A 文件。"};
 const VOICE_REC_DB = 'EnglishPracticeLesson2VoiceRecordings';
 const VOICE_REC_STORE = 'sentence-recordings';
 let voiceRecDbPromise = null;
@@ -254,8 +254,8 @@ async function startVoiceRecording(line,button){
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
     activeVoiceStream=stream; activeVoiceLine=line; activeVoiceChunks=[];
     const options={};
-    if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
-    else if(MediaRecorder.isTypeSupported('audio/mp4')) options.mimeType='audio/mp4';
+    if(MediaRecorder.isTypeSupported('audio/mp4')) options.mimeType='audio/mp4';
+    else if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
     activeVoiceRecorder=new MediaRecorder(stream,options);
     activeVoiceRecorder.ondataavailable=e=>{if(e.data && e.data.size) activeVoiceChunks.push(e.data);};
     activeVoiceRecorder.onstop=async()=>{
@@ -360,11 +360,15 @@ async function downloadVoiceRecording(line){
   try{
     const blob=await getVoiceRecording('line-'+line);
     if(!blob){voiceRecStatus(line,VOICE_REC_LABELS.empty);return;}
+    const mime=(blob.type||'').toLowerCase();
+    if(!mime.includes('mp4') && !mime.includes('m4a')){
+      voiceRecStatus(line,VOICE_REC_LABELS.m4aUnsupported);return;
+    }
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
-    a.href=url;a.download=`lesson2-sentence-${Number(line)+1}-recording.${(blob.type||'audio/webm').includes('mp4')?'mp4':'webm'}`;
+    a.href=url;a.download=`lesson2-sentence-${Number(line)+1}-recording.m4a`;
     document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
   }catch(err){voiceRecStatus(line,'Unable to download this recording. Please try again.');}
 }
 async function deleteVoiceRecording(line){
