@@ -198,9 +198,12 @@ if(id==="work"&&k==="s1"){
   const back=document.createElement("button");back.type="button";back.textContent=tr("shanghaiBack");
   back.style.cssText="margin:0 0 14px;padding:9px 14px;border:1px solid #d8e4f4;border-radius:10px;background:#fff;color:#123b78;font-weight:700;cursor:pointer";
   back.addEventListener("click",()=>render("work",false));list.appendChild(back);
-  const lesson=document.createElement("article");lesson.className="lesson";lesson.style.gridTemplateColumns="58px minmax(0,1fr)";
+  const lesson=document.createElement("article");lesson.className="lesson";lesson.style.gridTemplateColumns="205px minmax(0,1fr)";
+  lesson.style.cursor="pointer";lesson.setAttribute("role","link");lesson.setAttribute("tabindex","0");
   lesson.dataset.search=(tr("shanghaiTitle")+" "+tr("shanghaiDesc")+" ShangHai telephone consultation business English 商务电话咨询 tư vấn qua điện thoại").toLowerCase();
-  lesson.innerHTML=`<div class="group-icon" style="width:52px;height:52px;font-size:23px">📞</div><div class="lesson-info"><h3>${tr("shanghaiTitle")}</h3><p>${tr("shanghaiDesc")}</p><div class="meta"><a href="${tr("shanghaiHref")}">🌐 ${tr("shanghaiVersion")}</a></div></div>`;
+  lesson.innerHTML=`<img class="lesson-img" src="https://images.unsplash.com/photo-1758873272783-3e4996938595?auto=format&fit=crop&fm=jpg&q=85&w=900" alt="Natural photograph of a professional woman talking on the phone while working at a laptop"><div class="lesson-info"><h3>${tr("shanghaiTitle")}</h3><p>${tr("shanghaiDesc")}</p></div>`;
+  const openLesson=()=>{window.location.href=tr("shanghaiHref")};
+  lesson.addEventListener("click",openLesson);lesson.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openLesson();}});
   list.appendChild(lesson);filter();
  };
  card.addEventListener("click",openTopic);card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openTopic();}});
